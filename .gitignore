@@ -1,0 +1,13 @@
+arduino/build-uno
+
+brewisd/brewis.conf
+brewisd/context
+brewisd/brewis
+brewisd/*.cmi
+brewisd/*.cmx
+brewisd/*.o
+brewisd/._d
+brewisd/._ncdi
+
+web/vendor
+web/.env

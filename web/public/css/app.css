@@ -1,0 +1,14 @@
+/*
+ * -------------
+ * General style
+ * -------------
+ */
+
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.dialog-box p {
+    padding: 5px 10px;
+}

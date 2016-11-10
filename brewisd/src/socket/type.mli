@@ -1,0 +1,7 @@
+
+type t =
+    | SOCK_STREAM | SOCK_DGRAM | SOCK_RAW | SOCK_RDM
+    | SOCK_SEQPACKET | SOCK_DCCP | SOCK_PACKET
+    | SOCK_CLOEXEC | SOCK_NONBLOCK
+
+val to_int : t -> int
