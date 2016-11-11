@@ -16,6 +16,9 @@ external nbsocket_close : Unix.file_descr -> unit = "nbsocket_close"
 
 open Async.Std
 
+let one_ms = Core.Std.Time.Span.millisecond
+let ten_ms = Core.Std.Time.Span.create ~ms:10 ()
+
 let create dom typ proto =
     let e, desc = nbsocket_create (Domain.to_int dom) (Type.to_int typ) proto in
     match Errno.of_int e with
@@ -50,7 +53,7 @@ let read ?(buffer_size=63) { desc; _ } =
     | `Ok, 0, _ -> `EOF
     | `Ok, _, msg -> `Ok msg
 
-let read_until ?(buffer_size=63) ?(poll_interval=Core.Std.Time.Span.second) t terminator =
+let read_until ?(buffer_size=63) ?(poll_interval=ten_ms) t terminator =
     let rec delayed_loop acc=
         after poll_interval >>= fun () -> loop acc
     and loop acc =
@@ -67,7 +70,7 @@ let read_until ?(buffer_size=63) ?(poll_interval=Core.Std.Time.Span.second) t te
     in
     loop ""
 
-let rec write ?(poll_interval=Core.Std.Time.Span.millisecond) t msg =
+let rec write ?(poll_interval=one_ms) t msg =
     let { desc; _ } = t in
     let len = String.length msg in
     let e, out_len = nbsocket_write desc msg len in

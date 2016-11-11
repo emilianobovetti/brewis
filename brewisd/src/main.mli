@@ -25,7 +25,7 @@ type event =
     | ArduinoConnected
     | ArduinoReceived of string
     | ArduinoForwardCompleted
-    | WebConnected of w_dev
+    | WebAuthenticated of w_dev
     | WebReceived of string
     | WebForwardCompleted
     | WebExpired
@@ -45,13 +45,13 @@ val debug : string -> unit
  * Web tasks
  *)
 val web_listen : app_state -> task
-val web_connect : app_state -> task
+val web_authenticate : app_state -> task
 val web_refresh : app_state -> task
 
 (*
  * Web event handlers
  *)
-val web_on_connect : app_state -> app_state * task list
+val web_on_authenticate : app_state -> app_state * task list
 val web_on_receive : app_state -> string -> app_state * task list
 val web_on_forward_completed : app_state -> app_state * task list
 val web_on_expire : app_state ->  app_state * task list

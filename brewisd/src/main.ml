@@ -80,7 +80,7 @@ type event =
     | ArduinoConnected
     | ArduinoReceived of string
     | ArduinoForwardCompleted
-    | WebConnected of w_dev
+    | WebAuthenticated of w_dev
     | WebReceived of string
     | WebForwardCompleted
     | WebExpired
@@ -89,9 +89,8 @@ type event =
 type task = event Deferred.t
 
 let bt_address = `Bluetooth (Config.bluetooth_address, Config.bluetooth_channel)
-let bt_connection_interval = Core.Span.create ~sec:6 ()
-let web_connection_interval = Core.Span.create ~sec:5 ()
-let poll_interval = Core.Std.Time.Span.millisecond
+let bt_connection_interval = Core.Span.create ~sec:3 () (* TODO default: 6 *)
+let web_authentication_interval = Core.Span.create ~sec:5 ()
 
 (*
  * Web tasks
@@ -101,20 +100,21 @@ let rec web_listen = function { w_dev; _ } as s ->
     >>= fun (response, body) ->
     Cohttp_async.Body.to_string body
     >>= fun body ->
-    debug ("longpolling/command/dequeue response body: " ^ body);
     let open Yojson in let open Basic in
     let json = try from_string body with Json_error _ -> `Assoc [] in
     match Util.member "command" json with
-    | `String cmd -> return (WebReceived cmd)
+    | `String cmd ->
+        debug ("longpolling/command/dequeue response body: " ^ body);
+        return (WebReceived cmd)
     | _ -> web_listen s
 
-let rec web_connect = function { w_dev; _ } as s ->
+let rec web_authenticate = function { w_dev; _ } as s ->
     Jwt_session.authenticate w_dev "authenticate"
     >>= function
-    | `Ok w_dev -> return (WebConnected w_dev)
+    | `Ok w_dev -> return (WebAuthenticated w_dev)
     | `Error e ->
         log_error ("Error during web authentication: " ^ e ^ ", retrying...");
-        after web_connection_interval >>= fun () -> web_connect s
+        after web_authentication_interval >>= fun () -> web_authenticate s
 
 let web_timeout s =
     after Config.jwt_refresh_interval >>| fun () -> WebExpired
@@ -124,13 +124,13 @@ let web_refresh = function { w_dev; _ } as s ->
     >>= function
     | `Ok w_dev -> return (WebRefreshed w_dev)
     | `Error e ->
-        log_error ("Error during token/refresh request: " ^ e ^ ", reconnecting...");
-        web_connect s
+        log_error ("Error during token/refresh request: " ^ e ^ ", reauthenticating...");
+        web_authenticate s
 
 (*
  * Web event handlers
  *)
-let web_on_connect s =
+let web_on_authenticate s =
     let s = { s with w_state = `Listening } in
     s, [ web_listen s; web_timeout s ]
 
@@ -139,7 +139,7 @@ let web_on_receive s cmd =
     match a_state with
     | `Listening ->
         (* send GET_ACK command and wait for response *)
-        ignore (Nbsocket.write ~poll_interval a_dev "0\r");
+        ignore (Nbsocket.write a_dev "0\r");
         { s with
             a_state = `WaitForACK;
             w_state = `Forwarding;
@@ -172,7 +172,7 @@ let arduino_connect { a_dev; _ } =
         ArduinoDisconnected
 
 let arduino_listen { a_dev; _ } =
-    Nbsocket.read_until ~poll_interval a_dev Config.message_terminator
+    Nbsocket.read_until a_dev Config.message_terminator
     >>| function
     | `Ok msg -> ArduinoReceived msg
     | `Error _ as e ->
@@ -213,7 +213,7 @@ let arduino_on_receive s msg =
     match a_state, a_command with
     | `WaitForACK, Some cmd when Util.String.contains msg "ACK" ->
         (* Send command to Arduino *)
-        ignore (Nbsocket.write ~poll_interval a_dev cmd);
+        ignore (Nbsocket.write a_dev cmd);
         let s = { s with
                   a_state = `WaitForResponse;
                   a_command = None;
@@ -252,7 +252,7 @@ let string_of_event = function
     | ArduinoDisconnected -> "Arduino disconnected"
     | ArduinoReceived _ -> "Arduino received"
     | ArduinoForwardCompleted -> "Arduino forward completed"
-    | WebConnected _ -> "Web connected"
+    | WebAuthenticated _ -> "Web authenticated"
     | WebReceived _ -> "Web received"
     | WebForwardCompleted -> "Web forward completed"
     | WebExpired -> "Web session expired"
@@ -267,7 +267,7 @@ let rec main_loop s event task_lst =
     | ArduinoDisconnected -> arduino_on_disconnect s
     | ArduinoReceived msg -> arduino_on_receive s msg
     | ArduinoForwardCompleted -> arduino_on_forward_completed s
-    | WebConnected w_dev -> web_on_connect { s with w_dev }
+    | WebAuthenticated w_dev -> web_on_authenticate { s with w_dev }
     | WebReceived msg -> web_on_receive s msg
     | WebForwardCompleted -> web_on_forward_completed s
     | WebExpired -> web_on_expire s
@@ -304,7 +304,7 @@ let state =
       w_state = `Offline; w_dev;
     }
 
-let _ = schedule state [ arduino_connect state; web_connect state ]
+let _ = schedule state [ arduino_connect state; web_authenticate state ]
 
 (* Async scheduler *)
 let _ = Scheduler.go ()
