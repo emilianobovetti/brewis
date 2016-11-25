@@ -85,8 +85,8 @@
 #define LCD_ENABLE_PIN 11
 #define LCD_RS_PIN 12
 
-#define LCD_COLUMNS_NUM 16
-#define LCD_ROWS_NUM 2
+#define LCD_NUM_COLUMNS 16
+#define LCD_NUM_ROWS 2
 
 /*
  * --------------------

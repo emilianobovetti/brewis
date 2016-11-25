@@ -35,4 +35,3 @@ const char *ack   = "ACK";
 const char *unknown = "unknown";
 
 const char* space  = " ";
-const char* spaces = "     ";

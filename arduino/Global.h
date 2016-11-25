@@ -65,6 +65,5 @@ extern const char *ack;
 extern const char *unknown;
 
 extern const char* space;
-extern const char* spaces;
 
 #endif // __GLOBAL_H__
