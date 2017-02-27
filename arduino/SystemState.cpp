@@ -4,10 +4,10 @@
 
 #define DATA_SENDER_STATE_EEPROM_ADDRESS \
     STARTING_EEPROM_ADDRESS
-#define STARTING_TEMPERATURE_EEPROM_ADDRESS \
+#define TARGET_TEMPERATURE_EEPROM_ADDRESS \
     DATA_SENDER_STATE_EEPROM_ADDRESS + sizeof (DATA_SENDER_STATE_TYPE)
-#define STOPPING_TEMPERATURE_EEPROM_ADDRESS \
-    STARTING_TEMPERATURE_EEPROM_ADDRESS + sizeof (STARTING_TEMPERATURE_TYPE)
+#define DELTA_TEMPERATURE_EEPROM_ADDRESS \
+    TARGET_TEMPERATURE_EEPROM_ADDRESS + sizeof (TARGET_TEMPERATURE_TYPE)
 
 static struct
 {
@@ -15,21 +15,19 @@ static struct
 
     HEATING_SYSTEM_STATE_TYPE heatingSystemState;
 
-    STARTING_TEMPERATURE_TYPE startingTemperature;
+    TARGET_TEMPERATURE_TYPE targetTemperature;
 
-    STOPPING_TEMPERATURE_TYPE stoppingTemperature;
+    DELTA_TEMPERATURE_TYPE deltaTemperature;
 
     CURRENT_TEMPERATURE_TYPE currentTemperature;
-
-    CURRENT_DENSITY_TYPE currentDensity;
 
 } system;
 
 void initializeSystemState(void)
 {
     EEPROM.get(DATA_SENDER_STATE_EEPROM_ADDRESS, system.dataSenderState);
-    EEPROM.get(STARTING_TEMPERATURE_EEPROM_ADDRESS, system.startingTemperature);
-    EEPROM.get(STOPPING_TEMPERATURE_EEPROM_ADDRESS, system.stoppingTemperature);
+    EEPROM.get(TARGET_TEMPERATURE_EEPROM_ADDRESS, system.targetTemperature);
+    EEPROM.get(DELTA_TEMPERATURE_EEPROM_ADDRESS, system.deltaTemperature);
 
     if (system.dataSenderState != OFF_STATE && system.dataSenderState != ON_STATE)
     {
@@ -38,23 +36,23 @@ void initializeSystemState(void)
 
     // TODO
     // warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
+    // use union conversion instead
     unsigned int ones = -1;
-    unsigned int startingTemperature = *((unsigned int*) &system.startingTemperature);
-    unsigned int stoppingTemperature = *((unsigned int*) &system.stoppingTemperature);
+    unsigned int targetTemperature = *((unsigned int*) &system.targetTemperature);
+    unsigned int deltaTemperature = *((unsigned int*) &system.deltaTemperature);
 
-    if (startingTemperature == ones)
+    if (targetTemperature == ones)
     {
-        setStartingTemperature(DEFAULT_HS_STARTING_TEMPERATURE);
+        setTargetTemperature(DEFAULT_TARGET_TEMPERATURE);
     }
 
-    if (stoppingTemperature == ones)
+    if (deltaTemperature == ones)
     {
-        setStoppingTemperature(DEFAULT_HS_STOPPING_TEMPERATURE);
+        setDeltaTemperature(DEFAULT_DELTA_TEMPERATURE);
     }
 
     system.heatingSystemState = DISABLED_STATE;
     system.currentTemperature = UNKNOWN_TEMPERATURE;
-    system.currentDensity = UNKNOWN_DENSITY;
 }
 
 /*
@@ -73,24 +71,19 @@ HEATING_SYSTEM_STATE_TYPE getHeatingSystemState(void)
     return system.heatingSystemState;
 }
 
-STARTING_TEMPERATURE_TYPE getStartingTemperature(void)
+TARGET_TEMPERATURE_TYPE getTargetTemperature(void)
 {
-    return system.startingTemperature;
+    return system.targetTemperature;
 }
 
-STOPPING_TEMPERATURE_TYPE getStoppingTemperature(void)
+DELTA_TEMPERATURE_TYPE getDeltaTemperature(void)
 {
-    return system.stoppingTemperature;
+    return system.deltaTemperature;
 }
 
 CURRENT_TEMPERATURE_TYPE getCurrentTemperature(void)
 {
     return system.currentTemperature;
-}
-
-CURRENT_DENSITY_TYPE getCurrentDensity(void)
-{
-    return system.currentDensity;
 }
 
 /*
@@ -110,24 +103,19 @@ void setHeatingSystemState(HEATING_SYSTEM_STATE_TYPE state)
     system.heatingSystemState = state;
 }
 
-void setStartingTemperature(STARTING_TEMPERATURE_TYPE temperature)
+void setTargetTemperature(TARGET_TEMPERATURE_TYPE temperature)
 {
-    system.startingTemperature = temperature;
-    EEPROM.put(STARTING_TEMPERATURE_EEPROM_ADDRESS, system.startingTemperature);
+    system.targetTemperature = temperature;
+    EEPROM.put(TARGET_TEMPERATURE_EEPROM_ADDRESS, system.targetTemperature);
 }
 
-void setStoppingTemperature(STOPPING_TEMPERATURE_TYPE temperature)
+void setDeltaTemperature(DELTA_TEMPERATURE_TYPE temperature)
 {
-    system.stoppingTemperature = temperature;
-    EEPROM.put(STOPPING_TEMPERATURE_EEPROM_ADDRESS, system.stoppingTemperature);
+    system.deltaTemperature = temperature;
+    EEPROM.put(DELTA_TEMPERATURE_EEPROM_ADDRESS, system.deltaTemperature);
 }
 
 void setCurrentTemperature(CURRENT_TEMPERATURE_TYPE temperature)
 {
     system.currentTemperature = temperature;
-}
-
-void setCurrentDensity(CURRENT_DENSITY_TYPE density)
-{
-    system.currentDensity = density;
 }

@@ -4,7 +4,6 @@
 #include <Arduino.h>
 #include <TaskScheduler.h>
 #include "HeatingSystem.h"
-#include "DensityReader.h"
 #include "SystemState.h"
 #include "DataSender.h"
 #include "Parameters.h"
@@ -42,24 +41,21 @@ enum CommandKey
 
     GET_HEATING_SYSTEM_STATE      = 1,
     GET_DATA_SENDER_STATE         = 2,
-    GET_STARTING_TEMPERATURE      = 3,
-    GET_STOPPING_TEMPERATURE      = 4,
+    GET_TARGET_TEMPERATURE        = 3,
+    GET_DELTA_TEMPERATURE         = 4,
     GET_LCD_STATE                 = 5,
     GET_CURRENT_TEMPERATURE       = 6,
-    GET_CURRENT_DENSITY           = 7,
-    GET_CURRENT_SCALE_GRAM        = 8,
 
     SET_HEATING_SYSTEM_STATE      = 11,
     SET_DATA_SENDER_STATE         = 12,
-    SET_STARTING_TEMPERATURE      = 13,
-    SET_STOPPING_TEMPERATURE      = 14,
+    SET_TARGET_TEMPERATURE        = 13,
+    SET_DELTA_TEMPERATURE         = 14,
     SET_LCD_STATE                 = 15,
 
     SET_HEATING_SYSTEM_TIMING     = 21,
     SET_DATA_SENDER_TIMING        = 22,
     SET_LCD_REFRESHER_TIMING      = 25,
-    SET_TEMPERATURE_READER_TIMING = 26,
-    SET_DENSITY_READER_TIMING     = 27
+    SET_TEMPERATURE_READER_TIMING = 26
 };
 
 /*

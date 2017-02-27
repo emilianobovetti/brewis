@@ -15,21 +15,6 @@ void disableLCDRefresher(void)
     setTaskState(&lcdRefresherTask, NOT_RUNNING);
 }
 
-void emptyLCD(void)
-{
-    int row, column;
-
-    for (row = 0; row < LCD_NUM_ROWS; row++)
-    {
-        lcd.setCursor(0, row);
-
-        for (column = 0; column < LCD_NUM_COLUMNS; column++)
-        {
-            lcd.print(space);
-        }
-    }
-}
-
 void refreshLCD(void)
 {
     if (lcd.getState() != LCD_IDLE)
@@ -37,10 +22,43 @@ void refreshLCD(void)
         return;
     }
 
-    emptyLCD();
+    lcd.clear();
 
     lcd.setCursor(0, 0);
     lcd.print(getCurrentTemperature());
     lcd.setCursor(0, 1);
-    lcd.print(getCurrentDensity());
+
+    lcd.print("HS: ");
+
+    switch (getHeatingSystemState())
+    {
+        case STARTED_STATE:
+            lcd.print(on);
+            lcd.print(space);
+            lcd.print(space);
+            break;
+        case DISABLED_STATE:
+            lcd.print(off);
+            lcd.print(space);
+            break;
+        case STOPPED_STATE:
+            lcd.print("idle");
+            break;
+        default:
+            lcd.print(error);
+            lcd.print(space);
+    }
+
+    lcd.print(" DS: ");
+    switch (getDataSenderState())
+    {
+        case ON_STATE:
+            lcd.print(on);
+            break;
+        case OFF_STATE:
+            lcd.print(off);
+            break;
+        default:
+            lcd.print(error);
+    }
 }

@@ -275,7 +275,6 @@ let rec main_loop s event task_lst =
     in
     schedule s (task_lst@tasks)
 and schedule state task_lst =
-    debug ("Scheduled tasks: " ^ string_of_int (List.length task_lst));
     let rec loop = function
     | [], [] -> log_error "No tasks to schedule"; raise Fatal_error
     | [], acc -> []

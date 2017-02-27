@@ -38,6 +38,8 @@ bool checkButtonTwo(unsigned int input)
     {
         if (lcd.getState() == LCD_OFF) lcd.on();
 
+        lcd.clear();
+
         lcd.setCursor(0, 0);
         lcd.print(heatingSystem);
         lcd.setCursor(0, 1);
@@ -72,6 +74,8 @@ bool checkButtonThree(unsigned int input)
     if (input >= 978)
     {
         if (lcd.getState() == LCD_OFF) lcd.on();
+
+        lcd.clear();
 
         lcd.setCursor(0, 0);
         lcd.print(sendDataSystem);

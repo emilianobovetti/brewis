@@ -40,28 +40,10 @@
 #define DS18B20_BUS_PIN 6
 #define HEATING_SYSTEM_RELAY_PIN 7
 
-#define DEFAULT_HS_STARTING_TEMPERATURE 20
-#define DEFAULT_HS_STOPPING_TEMPERATURE 21
+#define DEFAULT_TARGET_TEMPERATURE 20
+#define DEFAULT_DELTA_TEMPERATURE 0.25
 
 #define UNKNOWN_TEMPERATURE -127.0
-
-/*
- * ---------------
- * Density control
- * ---------------
- */
-#define HX711_DOUT_PIN A2_PIN
-#define HX711_SCK_PIN A3_PIN
-
-                                    // grams
-#define MEASUREMENT_STANDARD_WEIGHT 185
-                                    // liters
-#define MEASUREMENT_STANDARD_VOLUME 0.158082357
-                                    // Kg / m^3
-#define MEASUREMENT_STANDARD_DENSITY \
-    (MEASUREMENT_STANDARD_WEIGHT / MEASUREMENT_STANDARD_VOLUME)
-
-#define UNKNOWN_DENSITY 0
 
 /*
  * -------

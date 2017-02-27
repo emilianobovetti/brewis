@@ -36,6 +36,10 @@ void sendData(void)
         strcat(globalBuffer, tmp);
     }
 
+    //////////////////////////
+    // TODO: density reader //
+    //////////////////////////
+    /*
     strcat(globalBuffer, ",dens=");
     if (getCurrentDensity() == UNKNOWN_DENSITY)
     {
@@ -46,6 +50,10 @@ void sendData(void)
         dtostrf(getCurrentDensity(), 4, 2, tmp);
         strcat(globalBuffer, tmp);
     }
+    */
+    //////////////////////////
+    //       end TODO       //
+    //////////////////////////
 
     // if there are bytes to read, process the input
     // before send data

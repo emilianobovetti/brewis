@@ -18,7 +18,7 @@ void disableHeatingSystem(void)
 {
     setTaskState(&heatingSystemTask, NOT_RUNNING);
     /*
-     * stop_heating_system must be called before
+     * stopHeatingSystem() must be called before
      * heating_system_state goes on DISABLED_STATE
      */
     stopHeatingSystem();
@@ -47,11 +47,15 @@ void stopHeatingSystem(void)
 
 void checkHeatingSystem(void)
 {
-    if (getCurrentTemperature() <= getStartingTemperature())
+    float maxTemperature = getTargetTemperature() + getDeltaTemperature();
+    float minTemperature = getTargetTemperature() - getDeltaTemperature();
+    float currentTemperature = getCurrentTemperature();
+
+    if (currentTemperature < minTemperature)
     {
         startHeatingSystem();
     }
-    else if (getCurrentTemperature() >= getStoppingTemperature())
+    else if (currentTemperature > maxTemperature)
     {
         stopHeatingSystem();
     }

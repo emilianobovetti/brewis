@@ -8,7 +8,6 @@
 
 #include "TemperatureReader.h"
 #include "HeatingSystem.h"
-#include "DensityReader.h"
 #include "LCDRefresher.h"
 #include "DataSender.h"
 
@@ -21,7 +20,6 @@
 DECLARE_TASK(dataSenderTask);
 DECLARE_TASK(heatingSystemTask);
 DECLARE_TASK(temperatureReaderTask);
-DECLARE_TASK(densityReaderTask);
 DECLARE_TASK(lcdRefresherTask);
 
 /*

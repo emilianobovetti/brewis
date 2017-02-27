@@ -3,7 +3,6 @@
 #include "Global.h"
 
 #include "TemperatureReader.h"
-#include "DensityReader.h"
 #include "ButtonsReader.h"
 #include "HeatingSystem.h"
 #include "LCDRefresher.h"
@@ -18,7 +17,6 @@ void setup(void)
     initializeDataSender();
     initializeHeatingSystem();
     initializeTemperatureReader();
-    initializeDensityReader();
     initializeLCDRefresher();
 
     /*
@@ -27,7 +25,6 @@ void setup(void)
     scheduleTask(&dataSenderTask);
     scheduleTask(&heatingSystemTask);
     scheduleTask(&temperatureReaderTask);
-    //scheduleTask(&densityReaderTask);
     scheduleTask(&lcdRefresherTask);
 }
 

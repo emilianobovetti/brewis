@@ -137,14 +137,14 @@ void handleGetDataSenderState(void)
     }
 }
 
-void handleGetStartingTemperature(void)
+void handleGetTargetTemperature(void)
 {
-    writeFloatInBuffer(getStartingTemperature());
+    writeFloatInBuffer(getTargetTemperature());
 }
 
-void handleGetStoppingTemperature(void)
+void handleGetDeltaTemperature(void)
 {
-    writeFloatInBuffer(getStoppingTemperature());
+    writeFloatInBuffer(getDeltaTemperature());
 }
 
 void handleGetLCDState(void)
@@ -169,23 +169,6 @@ void handleGetCurrentTemperature(void)
     {
         writeFloatInBuffer(getCurrentTemperature());
     }
-}
-
-void handleGetCurrentDensity(void)
-{
-    if (getCurrentDensity() == UNKNOWN_DENSITY)
-    {
-        writeStrInBuffer(unknown);
-    }
-    else
-    {
-        writeFloatInBuffer(getCurrentDensity());
-    }
-}
-
-void handleGetCurrentScaleGram(void)
-{
-    writeFloatInBuffer(getScaleGram());
 }
 
 /*
@@ -222,38 +205,28 @@ void handleSetDataSenderState(Command cmd)
     }
 }
 
-void handleSetStartingTemperature(Command cmd)
+void handleSetTargetTemperature(Command cmd)
 {
-    float startingTemperature = handleFloatCommand(cmd);
+    float targetTemperature = handleFloatCommand(cmd);
 
-    if (startingTemperature == NAN)
+    if (targetTemperature == NAN)
     {
         return;
     }
 
-    setStartingTemperature(startingTemperature);
-
-    if (getStoppingTemperature() < startingTemperature)
-    {
-        setStoppingTemperature(startingTemperature);
-    }
+    setTargetTemperature(targetTemperature);
 }
 
-void handleSetStoppingTemperature(Command cmd)
+void handleSetDeltaTemperature(Command cmd)
 {
-    float stoppingTemperature = handleFloatCommand(cmd);
+    float deltaTemperature = handleFloatCommand(cmd);
 
-    if (stoppingTemperature == NAN)
+    if (deltaTemperature == NAN)
     {
         return;
     }
 
-    setStoppingTemperature(stoppingTemperature);
-
-    if (getStartingTemperature() > stoppingTemperature)
-    {
-        setStartingTemperature(stoppingTemperature);
-    }
+    setDeltaTemperature(deltaTemperature);
 }
 
 void handleSetLCDState(Command cmd)
@@ -296,11 +269,6 @@ void handleSetTemperatureReaderTiming(Command cmd)
     handleTimingCommand(cmd, &temperatureReaderTask);
 }
 
-void handleSetDensityReaderTiming(Command cmd)
-{
-    handleTimingCommand(cmd, &densityReaderTask);
-}
-
 /*
  * -----------
  * Run command
@@ -322,23 +290,17 @@ void runCommand(Command cmd)
         case GET_DATA_SENDER_STATE:
             handleGetDataSenderState();
             break;
-        case GET_STARTING_TEMPERATURE:
-            handleGetStartingTemperature();
+        case GET_TARGET_TEMPERATURE:
+            handleGetTargetTemperature();
             break;
-        case GET_STOPPING_TEMPERATURE:
-            handleGetStoppingTemperature();
+        case GET_DELTA_TEMPERATURE:
+            handleGetDeltaTemperature();
             break;
         case GET_LCD_STATE:
             handleGetLCDState();
             break;
         case GET_CURRENT_TEMPERATURE:
             handleGetCurrentTemperature();
-            break;
-        case GET_CURRENT_DENSITY:
-            handleGetCurrentDensity();
-            break;
-        case GET_CURRENT_SCALE_GRAM:
-            handleGetCurrentScaleGram();
             break;
 
         case SET_HEATING_SYSTEM_STATE:
@@ -347,11 +309,11 @@ void runCommand(Command cmd)
         case SET_DATA_SENDER_STATE:
             handleSetDataSenderState(cmd);
             break;
-        case SET_STARTING_TEMPERATURE:
-            handleSetStartingTemperature(cmd);
+        case SET_TARGET_TEMPERATURE:
+            handleSetTargetTemperature(cmd);
             break;
-        case SET_STOPPING_TEMPERATURE:
-            handleSetStoppingTemperature(cmd);
+        case SET_DELTA_TEMPERATURE:
+            handleSetDeltaTemperature(cmd);
             break;
         case SET_LCD_STATE:
             handleSetLCDState(cmd);
@@ -368,9 +330,6 @@ void runCommand(Command cmd)
             break;
         case SET_TEMPERATURE_READER_TIMING:
             handleSetTemperatureReaderTiming(cmd);
-            break;
-        case SET_DENSITY_READER_TIMING:
-            handleSetDensityReaderTiming(cmd);
             break;
 
         case TIMEOUT_EXPIRED:
@@ -389,6 +348,7 @@ void runCommand(Command cmd)
     COMM_SERIAL.println(globalBuffer);
 
     // wait a bit to be sure that the response was read
+    // don't delete this delay!
     delay(1000);
 }
 
