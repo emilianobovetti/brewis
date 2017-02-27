@@ -57,24 +57,7 @@ GLOBALS = (function () {
         GLOBALS.startAutoRefresh();
         GLOBALS.longPollingSession = GLOBALS.session.fork();
         COOKIES.set('token', GLOBALS.session.getToken());
-
-        updateLatestMeasurements();
     }
-
-    // update last measurements
-    function updateLatestMeasurements () {
-        GLOBALS.session
-            .get('measurements/latest')
-            .onComplete(function (xhr) {
-                DOM.get('latest-measurements').innerHTML = xhr.responseText.replace(/,/g, ', ');
-            });
-    }
-
-    DOM.get('update-measurements').addEventListener('click', function(event) {
-        event.preventDefault();
-
-        updateLatestMeasurements();
-    });
 
     // if the token is present in cookie
     // try to refresh it
@@ -114,49 +97,6 @@ GLOBALS = (function () {
                 DOM.hide('login-success');
                 DOM.show('login-error', 5000);
                 COOKIES.remove('token');
-            });
-    };
-
-    // command-execution
-    DOM.get('command-execution').onsubmit = function (event) {
-        var payload = {};
-
-        event.preventDefault();
-
-        payload.command = DOM.get('input-command').value.split(',');
-
-        GLOBALS.longPollingSession.post('longpolling/command/enqueue', payload)
-            .onComplete(function (xhr) {
-                DOM.get('command-result').innerHTML = xhr.responseText.replace(/,/g, ', ');
-            });
-    };
-
-    // create-user
-    DOM.get('create-user').onsubmit = function (event) {
-        var payload = {};
-
-        event.preventDefault();
-
-        payload.name = DOM.get('new-user-name').value.trim();
-        payload.password = DOM.get('new-user-password').value;
-
-        GLOBALS.session.post('user/create', payload)
-            .onComplete(function (xhr) {
-                DOM.get('user-creation-result').innerHTML = xhr.responseText.replace(/,/g, ', ');
-            });
-    };
-
-    // delete-user
-    DOM.get('delete-user').onsubmit = function (event) {
-        var payload = {};
-
-        event.preventDefault();
-
-        payload.name = DOM.get('delete-user-name').value.trim();
-
-        GLOBALS.session.post('user/delete', payload)
-            .onComplete(function (xhr) {
-                DOM.get('user-deletion-result').innerHTML = xhr.responseText.replace(/,/g, ', ');
             });
     };
 })(window);

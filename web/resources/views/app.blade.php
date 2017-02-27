@@ -7,11 +7,11 @@
 
     <title>@yield('title')</title>
     <meta name="description" content="@yield('description')" />
+
     <!-- CSS -->
-    @section('css')
-      <link media="all" type="text/css" rel="stylesheet" href="{{ asset('css/app.css') }}" />
-      <link media="all" type="text/css" rel="stylesheet" href="{{ asset('bootstrap-3.3.5-dist/css/bootstrap.min.css') }}" />
-    @show
+    <link media="all" type="text/css" rel="stylesheet" href="{{ asset('css/app.css') }}" />
+    <link media="all" type="text/css" rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" />
+    @yield('css')
     <!-- end CSS -->
 
     <script type="text/javascript">
@@ -31,16 +31,23 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a href="{{ url('/') }}" class="navbar-brand">Homebrew</a>
+          <a href="{{ url('/') }}" class="navbar-brand">Home</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url('manage') }}">Manage</a></li>
+          </ul>
+
           <form class="navbar-form navbar-right" id="login-form">
+
+            <div class="dialog-box">
+              <span class="bg-success hide" id="login-success">Login successfull</span>
+              <span class="bg-danger hide" id="login-error">Login error</span>
+              <span class="bg-info hide" id="session-refreshed">Session refreshed</span>
+              <span class="bg-danger hide" id="session-expired">Session expired</span>
+            </div>
+
             <div class="form-group">
               <input type="text" placeholder="Name" class="form-control" id="login-name" />
             </div>
@@ -53,43 +60,29 @@
       </div>
     </nav>
 
-    <div class="jumbotron">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-8">
-            <h1>Hello, world!</h1>
-            <p>
-              This is the awesome homebrewing system made by Emiliano Bovetti.
-            </p>
-          </div>
-          <div class="col-xs-4 dialog-box">
-            <p class="bg-success hide" id="login-success">Login successfull</p>
-            <p class="bg-danger hide" id="login-error">Login error</p>
-            <p class="bg-info hide" id="session-refreshed">Session refreshed</p>
-            <p class="bg-danger hide" id="session-expired">Session expired</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="container">
 
     <!-- page content -->
     @yield('content')
     <!-- end page content -->
 
+      <hr>
+
       <footer>
-        <p>&copy; Emiliano Bovetti 2015</p>
+        <p>&copy; Emiliano Bovetti {{ date('Y') }}</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
 
     <script type="text/javascript" src="{{ asset('js/jwt_sessions.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/cookies.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
     <!-- getbootstrap js -->
-    <script type="text/javascript" src="{{ asset('bootstrap-3.3.5-dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+    @yield('script')
+
   </body>
 </html>

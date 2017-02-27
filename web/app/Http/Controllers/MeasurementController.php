@@ -28,6 +28,20 @@ class MeasurementController extends BaseController
         }
     }
 
+    public function getAllMeasurements()
+    {
+        $result = BrewingMeasurement::all();
+
+        if ($result === null)
+        {
+            return response()->json(['measurements' => 'empty']);
+        }
+        else
+        {
+            return response()->json($result);
+        }
+    }
+
     public function postUploadMeasurements(Request $request)
     {
         $input = $request->input('measurements');

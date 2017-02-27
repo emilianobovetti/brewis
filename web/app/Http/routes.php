@@ -16,6 +16,11 @@ $app->get('/', function() use ($app)
     return view('index');
 });
 
+$app->get('manage', function() use ($app)
+{
+    return view('manage');
+});
+
 /*
  * Authentication routes
  */
@@ -36,6 +41,8 @@ $app->post('user/delete', 'UserController@postUserDelete');
  * Measurements route
  */
 $app->get('measurements/latest', 'MeasurementController@getLatestMeasurements');
+
+$app->get('measurements/all', 'MeasurementController@getAllMeasurements');
 
 $app->post('measurements/upload', 'MeasurementController@postUploadMeasurements');
 
