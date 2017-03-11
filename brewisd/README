@@ -1,1 +1,10 @@
-apt-get install camlp4-extra
+
+git clone
+
+apt-get install opam m4 libffi-dev libssl-dev
+
+opam init
+
+eval `opam config env`
+
+opam install ocamlfind async async_ssl cohttp config-file yojson

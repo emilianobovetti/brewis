@@ -7,12 +7,12 @@ type t =
       token:       string option;
     }
 
-let json_header = [ "Content-Type", "application/json" ]
+let json_header = ("Content-Type", "application/json")
 
 let empty_header = Cohttp.Header.init ()
 
 let request_headers headers =
-    Cohttp.Header.add_list headers json_header
+    Cohttp.Header.add headers json_header
 
 let request_uri { base_url; token; _ } route =
     let route = match token with
