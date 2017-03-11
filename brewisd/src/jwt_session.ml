@@ -12,7 +12,7 @@ let json_header = ("Content-Type", "application/json")
 let empty_header = Cohttp.Header.init ()
 
 let request_headers headers =
-    Cohttp.Header.add headers json_header
+    let k, v = json_header in Cohttp.Header.add headers k v
 
 let request_uri { base_url; token; _ } route =
     let route = match token with
