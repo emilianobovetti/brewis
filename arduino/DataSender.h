@@ -3,7 +3,7 @@
 
 #include "DataReceiver.h"
 #include "SystemState.h"
-#include "Parameters.h"
+#include "Settings.h"
 #include "Global.h"
 #include "Helper.h"
 

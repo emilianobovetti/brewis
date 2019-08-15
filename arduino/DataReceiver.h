@@ -2,7 +2,7 @@
 #define __DATA_RECEIVER_H__
 
 #include <SoftwareSerial.h>
-#include "Parameters.h"
+#include "Settings.h"
 #include "Global.h"
 #include "Command.h"
 #include "Helper.h"

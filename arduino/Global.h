@@ -4,7 +4,7 @@
 #include <SoftwareSerial.h>
 #include <TaskScheduler.h>
 #include "LiquidCrystalImproved.h"
-#include "Parameters.h"
+#include "Settings.h"
 
 #include "TemperatureReader.h"
 #include "HeatingSystem.h"
