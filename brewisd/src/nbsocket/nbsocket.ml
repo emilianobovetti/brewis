@@ -1,4 +1,9 @@
 
+module Type =  Type
+module Domain =  Domain
+module Bluetooth =  Bluetooth
+module Errno =  Errno
+
 type t =
     { dom : Domain.t;
       typ : Type.t;
@@ -14,10 +19,10 @@ external nbsocket_read : Unix.file_descr -> int -> int * int * string = "nbsocke
 external nbsocket_write : Unix.file_descr -> string -> int -> int * int = "nbsocket_write"
 external nbsocket_close : Unix.file_descr -> unit = "nbsocket_close"
 
-open Async.Std
+open Async
 
-let one_ms = Core.Std.Time.Span.millisecond
-let ten_ms = Core.Std.Time.Span.create ~ms:10 ()
+let one_ms = Core.Time.Span.millisecond
+let ten_ms = Core.Time.Span.create ~ms:10 ()
 
 let create dom typ proto =
     let e, desc = nbsocket_create (Domain.to_int dom) (Type.to_int typ) proto in
@@ -32,13 +37,13 @@ let readable { desc; _ } =
     match nbsocket_readable desc with
     | -1 -> `Failed
     | 0 -> `Idle
-    | n -> `Ok
+    | _n -> `Ok
 
 let writable { desc; _ } =
     match nbsocket_writable desc with
     | -1 -> `Failed
     | 0 -> `Idle
-    | n -> `Ok
+    | _n -> `Ok
 
 let connect { desc; dom; _ } addr =
     let open Domain in

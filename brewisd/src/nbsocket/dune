@@ -1,0 +1,11 @@
+(library
+ (name nbsocket)
+ (public_name brewisd.nbsocket)
+ (libraries async util)
+ (c_names
+  ("external_bluetooth"
+   "external_domain"
+   "external_errno"
+   "external_nbsocket"
+   "external_type"))
+ (c_library_flags (-lbluetooth)))

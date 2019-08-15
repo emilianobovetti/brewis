@@ -1,4 +1,4 @@
-open Async.Std
+open Async
 open Cohttp_async
 
 type t =
@@ -11,14 +11,15 @@ let json_header = ("Content-Type", "application/json")
 
 let empty_header = Cohttp.Header.init ()
 
-let request_headers headers =
-    let k, v = json_header in Cohttp.Header.add headers k v
+let request_headers { token; _ } headers =
+    let k, v = json_header in
+    let headers' = Cohttp.Header.add headers k v in
+    match token with
+        | None -> headers'
+        | Some t ->
+            Cohttp.Header.add headers' "Authorization" ("Bearer " ^ t)
 
-let request_uri { base_url; token; _ } route =
-    let route = match token with
-        | None -> route
-        | Some t -> route ^ "?token=" ^ t
-    in
+let request_uri { base_url; _ } route =
     base_url ^ route |> Uri.of_string
 
 let credentials_to_json { credentials; _ } =
@@ -28,19 +29,19 @@ let create base_url credentials =
     { base_url; credentials; token = None; }
 
 let get ?(headers=empty_header) session route =
-    let headers = request_headers headers in
+    let headers = request_headers session headers in
     request_uri session route
     |> Client.get ~headers
 
 let post ?(headers=empty_header) ?(body=`Null) session route =
-    let headers = request_headers headers
-    and body = body |> Yojson.Basic.to_string |> Body.of_string in
+    let headers = request_headers session headers
+    and body = body |> Yojson.to_string |> Body.of_string in
     request_uri session route
     |> Client.post ~headers ~body
 
 let authenticate session route =
     post ~body:(credentials_to_json session) session route
-    >>= fun (response, body) ->
+    >>= fun (_response, body) ->
     Body.to_string body
     >>| fun body ->
     let open Yojson in let open Basic in
@@ -51,7 +52,7 @@ let authenticate session route =
 
 let refresh session route =
     get session route
-    >>| fun (response, body) ->
+    >>| fun (response, _body) ->
     let headers = Response.headers response
     and bearer = "Bearer " in
     match Cohttp.Header.get headers "Authorization" with

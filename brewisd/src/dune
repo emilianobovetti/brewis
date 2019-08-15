@@ -1,0 +1,13 @@
+(executable
+ (name main)
+ (public_name brewisd)
+ (libraries
+  unix
+  async
+  core.lock_file_blocking
+  cohttp
+  cohttp-async
+  config-file
+  yojson
+  util
+  nbsocket))

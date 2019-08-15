@@ -1,0 +1,9 @@
+/.git
+
+Dockerfile*
+Makefile*
+LICENSE*
+README*
+
+.dockerignore
+.gitignore

@@ -1,0 +1,131 @@
+#!/bin/bash -eu
+
+self_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+non_empty ()
+{
+    test -n "$(echo $1)"
+}
+
+mac_addr ()
+{
+    test "$(echo "$1" | grep -Ec '^([0-9A-F]{2}:){5}[0-9A-F]{2}$')" -eq 1
+}
+
+int ()
+{
+    test "$1" -eq "$1" 2>/dev/null
+}
+
+positive-int ()
+{
+    test "$1" -gt 0 2>/dev/null
+}
+
+ask ()
+{
+    valid="$1"
+    prompt="$2"
+    var="$3"
+    line=
+
+    while true; do
+        read -p "${prompt}" line
+
+        if "${valid}" "${line}"; then
+            break
+        fi
+    done
+
+    eval "${var}=${line}"
+}
+
+ask mac_addr "Arduino MAC address: " bt_address
+ask positive-int "Arduino bluetooth channel: " bt_channel
+ask non_empty "Web service endpoint: " web_endpoint
+ask non_empty "Web service authentication name: " auth_name
+ask non_empty "Web service authentication password: " auth_pass
+
+cat << EOF > "${self_path}/brewisd.conf"
+(*
+ * MAC address of Arduino bluetooth module.
+ *
+ * Type: string
+ * Required
+ *)
+bluetooth_address="${bt_address}"
+
+(*
+ * Bluetooth channel of Arduino module.
+ *
+ * Type: int
+ * Required
+ *)
+bluetooth_channel=${bt_channel}
+
+(*
+ * Web service endpoint.
+ *
+ * Type: string
+ * Required
+ *
+ * e.g.: "http://localhost:8080/index.php"
+ *)
+base_url="${web_endpoint}"
+
+(*
+ * Web service authentication name.
+ *
+ * Type: string
+ * Required
+ *)
+auth_name="${auth_name}"
+
+(*
+ * Web service authentication password.
+ *
+ * Type: string
+ * Required
+ *)
+auth_password="${auth_pass}"
+
+(*
+ * brewisd pid file.
+ *
+ * Type: string
+ * Default: "/var/run/brewisd.pid"
+ *)
+pidfile="/var/run/brewisd.pid"
+
+(*
+ * brewisd log file.
+ *
+ * Type: string
+ * Default: "/var/log/brewisd.log"
+ *)
+logfile="/var/log/brewisd.log"
+
+(*
+ * Web session refresh interval in seconds.
+ *
+ * Type: int
+ * Default: 1800
+ *)
+jwt_refresh_interval=1800
+
+(*
+ * Arduino message terminator.
+ *
+ * Type: string
+ * Default: "\r\n"
+ *)
+message_terminator="\r\n"
+
+(*
+ * Enable/disable verbose mode.
+ *
+ * Type: boolean
+ * Default: false
+ *)
+debug_mode=false
+EOF

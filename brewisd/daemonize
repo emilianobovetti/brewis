@@ -1,13 +1,8 @@
 #!/bin/bash
 
-eval $(sed '/(\*/,/\*)/d' brewis.conf)
+eval $(sed '/(\*/,/\*)/d' /etc/brewisd.conf)
 
-working_directory="${working_directory:-.}"
-daemon_pidfile="${daemon_pidfile:-brewis.pid}"
-daemon_logfile="${daemon_logfile:-brewis.log}"
-
-pidfile="$working_directory/$daemon_pidfile"
-logfile="$working_directory/$daemon_logfile"
+pidfile="${pidfile:-/var/run/brewisd.pid}"
 
 if [ -f "$pidfile" ]; then
     pid=$(cat "$pidfile")
@@ -37,7 +32,7 @@ start_daemon ()
     check_daemon
 
     if [ $? -eq 0 ]; then
-        ./brewis &> "$logfile" &
+        ./brewisd &
         echo "Daemon started"
     else
         echo "Daemon already running with PID: $pid"

@@ -1,6 +1,4 @@
-brewis.conf
-context
-brewis
+/brewisd.conf
 *.cmi
 *.cmx
 *.o

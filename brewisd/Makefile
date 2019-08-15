@@ -1,28 +1,20 @@
-RESULT = brewis
+.PHONY: all build run
 
-SOURCES = \
-    src/util.mli src/util.ml \
-    src/socket/external_errno.c src/socket/errno.mli src/socket/errno.ml \
-    src/socket/external_bluetooth.c src/socket/bluetooth.mli src/socket/bluetooth.ml \
-    src/socket/external_domain.c src/socket/domain.mli src/socket/domain.ml \
-    src/socket/external_type.c src/socket/type.mli src/socket/type.ml \
-    src/socket/protocol.mli src/socket/protocol.ml \
-    src/socket/address.mli src/socket/address.ml \
-    src/socket/external_nbsocket.c src/socket/nbsocket.mli src/socket/nbsocket.ml \
-    src/jwt_session.mli src/jwt_session.ml \
-    src/config.mli src/config.ml \
-    src/main.mli src/main.ml
+mounts := \
+	--mount src=brewisd-logs,dst=/var/log \
+	--mount src=/etc/localtime,dst=/etc/localtime,type=bind,readonly \
+	--mount src=/usr/share/zoneinfo,dst=/usr/share/zoneinfo,type=bind,readonly
 
-PACKS = unix async cohttp cohttp.async config-file yojson
+all: build
 
-CLIBS = bluetooth
+build:
+	docker build --tag brewisd .
 
-THREADS = yes
+brewisd.conf:
+	bash mk-conf
 
-OCAMLMAKEFILE = ./OCamlMakefile
+run: brewisd.conf build
+	docker run -it --net host $(mounts) brewisd
 
-all:    nc
-
-%:      all
-
-include $(OCAMLMAKEFILE)
+run-shell: brewisd.conf build
+	docker run -it --net host $(mounts) brewisd /bin/sh

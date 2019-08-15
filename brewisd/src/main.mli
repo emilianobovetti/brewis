@@ -1,4 +1,5 @@
-open Async.Std
+open Async
+open Nbsocket
 
 exception Fatal_error
 

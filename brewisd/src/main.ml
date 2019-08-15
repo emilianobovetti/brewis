@@ -1,40 +1,56 @@
 
 exception Fatal_error
 
-(*
- * Create daemon working directory
- *)
 let rec mkdir_p dir perm =
-    if Sys.file_exists dir then ()
-    else (mkdir_p (Filename.dirname dir) perm; Unix.mkdir dir perm)
+    if not (Sys.file_exists dir) then
+        (mkdir_p (Filename.dirname dir) perm; Unix.mkdir dir perm)
 
-let () = mkdir_p Config.working_directory 0o700
+let pidfile_dirname = Filename.dirname Config.pidfile
+let logfile_dirname = Filename.dirname Config.logfile
 
-(*
- * Create pidfile
- *)
-let _ = Async.Std.Lock_file.create ~unlink_on_exit:true Config.daemon_pidfile
+let () = begin
+    mkdir_p pidfile_dirname 0o700;
+    mkdir_p logfile_dirname 0o700;
+
+    if not (Lock_file_blocking.create ~unlink_on_exit:true Config.pidfile) then
+        failwith ("Unable to create pidfile '" ^ Config.pidfile ^ "'");
+end
 
 (*
  * log system
  *)
+let log_channel =
+    if Config.stdout_mode then
+        stdout
+    else
+        open_out_gen [Open_creat; Open_append; Open_text] 0o700 Config.logfile
+
+let out_info msg =
+    output_string log_channel ("INFO " ^ msg)
+
+let out_err msg =
+    output_string log_channel ("ERR " ^ msg)
+
+let out_debug msg =
+    output_string log_channel ("DEBUG " ^ msg)
+
 let log output_fn msg =
     let open Unix in
     let t = gettimeofday () |> localtime in
     let datetime = Printf.sprintf "%d/%d/%d %d:%d:%d"
         t.tm_mday (1 + t.tm_mon) (1900 + t.tm_year) t.tm_hour t.tm_min t.tm_sec in
-    Printf.sprintf "[%s] %s" datetime msg
-    |> output_fn
+    let () = output_fn (Printf.sprintf "[%s] %s\n" datetime msg) in
+    flush log_channel
 
-let log_message = log print_endline
+let log_message = log out_info
 
-let log_error = log prerr_endline
+let log_error = log out_err
 
 let log_errno description errno =
-    log_error (description ^ ": " ^ Errno.to_string errno)
+    log_error (description ^ ": " ^ Nbsocket.Errno.to_string errno)
 
 let debug =
-    if Config.debugging_mode then log_message else fun msg -> ()
+    if Config.debug_mode then log out_debug else fun _msg -> ()
 
 (*
  * Signal handling
@@ -46,7 +62,10 @@ let () = begin
     handle_signal Sys.sigterm (fun _ -> log_message "SIGTERM caught"; exit 0);
     handle_signal Sys.sigint (fun _ -> log_message "SIGINT caught"; exit 0);
 
-    at_exit (fun () -> log_message "exiting");
+    at_exit (fun () ->
+        flush log_channel;
+        log_message "exit"
+    );
 end
 
 (*
@@ -55,7 +74,7 @@ end
  * https://people.csail.mit.edu/albert/bluez-intro/c404.html
  *)
 
-open Async.Std
+open Async
 
 type base_state = [ `Offline | `Listening | `Forwarding ]
 
@@ -89,15 +108,15 @@ type event =
 type task = event Deferred.t
 
 let bt_address = `Bluetooth (Config.bluetooth_address, Config.bluetooth_channel)
-let bt_connection_interval = Core.Span.create ~sec:3 () (* TODO default: 6 *)
-let web_authentication_interval = Core.Span.create ~sec:5 ()
+let bt_connection_interval = Core.Time.Span.create ~sec:3 () (* TODO default: 6 *)
+let web_authentication_interval = Core.Time.Span.create ~sec:5 ()
 
 (*
  * Web tasks
  *)
 let rec web_listen = function { w_dev; _ } as s ->
     Jwt_session.get w_dev "longpolling/command/dequeue"
-    >>= fun (response, body) ->
+    >>= fun (_response, body) ->
     Cohttp_async.Body.to_string body
     >>= fun body ->
     let open Yojson in let open Basic in
@@ -116,7 +135,7 @@ let rec web_authenticate = function { w_dev; _ } as s ->
         log_error ("Error during web authentication: " ^ e ^ ", retrying...");
         after web_authentication_interval >>= fun () -> web_authenticate s
 
-let web_timeout s =
+let web_timeout _s =
     after Config.jwt_refresh_interval >>| fun () -> WebExpired
 
 let web_refresh = function { w_dev; _ } as s ->
@@ -182,7 +201,7 @@ let arduino_listen { a_dev; _ } =
 let forward_measurements_to_web { w_dev; _ } msg =
     let json = `Assoc [ "measurements", `String msg ] in
     Jwt_session.post ~body:json w_dev "measurements/upload"
-    >>= fun (response, body) ->
+    >>= fun (_response, body) ->
     Cohttp_async.Body.to_string body
     >>| fun body ->
     debug ("measurements/upload response body:" ^ body);
@@ -191,7 +210,7 @@ let forward_measurements_to_web { w_dev; _ } msg =
 let forward_response_to_web { w_dev; _ } msg =
     let json = `Assoc [ "response", `String msg ] in
     Jwt_session.post ~body:json w_dev "command/response"
-    >>= fun (response, body) ->
+    >>= fun (_response, body) ->
     Cohttp_async.Body.to_string body
     >>| fun body ->
     debug ("command/response response body:" ^ body);
@@ -219,7 +238,7 @@ let arduino_on_receive s msg =
                   a_command = None;
                 }
         in s, [ arduino_listen s ]
-    | `WaitForACK, Some cmd ->
+    | `WaitForACK, Some _cmd ->
         debug "Waiting for ACK, keep listening";
         s, [ arduino_listen s ]
     | `WaitForACK, None ->
@@ -277,7 +296,7 @@ let rec main_loop s event task_lst =
 and schedule state task_lst =
     let rec loop = function
     | [], [] -> log_error "No tasks to schedule"; raise Fatal_error
-    | [], acc -> []
+    | [], _acc -> []
     | hd::tl, acc ->
         let call_main_loop event =
             main_loop state event (acc@tl) |> ignore
@@ -289,7 +308,7 @@ and schedule state task_lst =
 (* Bootstrap *)
 
 let a_dev =
-    let open Domain in let open Type in let open Bluetooth in
+    let open Nbsocket.Domain in let open Nbsocket.Type in let open Nbsocket.Bluetooth in
     match Nbsocket.create PF_BLUETOOTH SOCK_STREAM Protocol.rfcomm with
     | `Error _ as e -> log_errno "Failed to create bluetooth socket" e; raise Fatal_error
     | `Ok a_dev -> a_dev

@@ -1,4 +1,4 @@
-open Async.Std
+open Async
 open Cohttp_async
 
 type t
@@ -28,7 +28,7 @@ val get :
  *)
 val post :
     ?headers:Cohttp.Header.t ->
-    ?body:Yojson.Basic.json ->
+    ?body:Yojson.t ->
     t -> string -> (Response.t * Body.t) Deferred.t
 
 (*
