@@ -1,8 +1,7 @@
-
 (function (window) {
     'use strict';
 
-    GLOBALS.session.get('measurements/all').onComplete(function (xhr) {
+    function show(measurements) {
         var options =  {
                 width: '100%',
                 height: '400px',
@@ -20,7 +19,7 @@
                 },
             },
 
-            data = JSON.parse(xhr.responseText).map(function (element) {
+            data = measurements.map(function (element) {
                 return { x: new Date(element.timestamp), y: element.temperature };
             }),
 
@@ -29,6 +28,12 @@
                     { name: 'temperature', data }
                 ]
             }, options);
+    }
+
+    GLOBALS.session.get('measurements/all').onComplete(function (xhr) {
+        try {
+            show(JSON.parse(xhr.responseText));
+        } catch (e) {}
     });
 
 })(window);

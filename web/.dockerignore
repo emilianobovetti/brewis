@@ -1,0 +1,8 @@
+/vendor
+/.git
+
+docker-compose.yml
+Dockerfile*
+Makefile*
+LICENSE*
+README*

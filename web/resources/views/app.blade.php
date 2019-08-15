@@ -28,16 +28,13 @@
 
   <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse">
       <div class="container">
         <div class="navbar-header">
-          <a href="{{ url('/') }}" class="navbar-brand">Home</a>
-        </div>
-
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="{{ url('manage') }}">Manage</a></li>
-          </ul>
+          <div class="nav">
+            <a href="{{ url('/') }}" class="navbar-brand">Home</a>
+            <a href="{{ url('manage') }}" class="navbar-link">Manage</a>
+          </div>
 
           <form class="navbar-form navbar-right" id="login-form">
 
@@ -81,7 +78,6 @@
     <script type="text/javascript" src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
     <!-- getbootstrap js -->
     <script type="text/javascript" src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-
     @yield('script')
 
   </body>

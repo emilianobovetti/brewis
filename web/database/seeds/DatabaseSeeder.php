@@ -11,18 +11,26 @@ class DatabaseSeeder extends Seeder {
     {
         Model::unguard();
 
-        $this->call('UsersTableSeeder');
-        $this->command->info('Users table seeded');
+        $this->call('AdminSeeder');
     }
 }
 
-class UsersTableSeeder extends Seeder {
+class AdminSeeder extends Seeder {
 
     public function run()
     {
-        $user = new User;
-        $user->name = 'admin';
-        $user->hashPassword('admin');
-        $user->save();
+        if (User::count() === 0)
+        {
+            $user = new User;
+            $user->name = 'admin';
+            $user->hashPassword('admin');
+            $user->save();
+
+            $this->command->info('User `admin` inserted');
+        }
+        else
+        {
+            $this->command->info('User table not empty');
+        }
     }
 }

@@ -2,7 +2,9 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-(new Dotenv\Dotenv(__DIR__.'/../'))->load();
+(new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
+    dirname(__DIR__)
+))->bootstrap();
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +18,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 */
 
 $app = new Laravel\Lumen\Application(
-    realpath(__DIR__.'/../')
+    dirname(__DIR__)
 );
 
 $app->withFacades();
@@ -55,14 +57,6 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//     Illuminate\Cookie\Middleware\EncryptCookies::class,
-//     Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-//     Illuminate\Session\Middleware\StartSession::class,
-//     Illuminate\View\Middleware\ShareErrorsFromSession::class,
-//     Laravel\Lumen\Http\Middleware\VerifyCsrfToken::class,
-// ]);
-
 $app->routeMiddleware([
     'jwt.auth'    => Tymon\JWTAuth\Middleware\Authenticate::class,
     'jwt.refresh' => Tymon\JWTAuth\Middleware\RefreshToken::class,
@@ -83,6 +77,18 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
+| Load Configuration Files
+|--------------------------------------------------------------------------
+|
+*/
+
+$app->configure('auth');
+$app->configure('jwt');
+$app->configure('database');
+$app->configure('arduino');
+
+/*
+|--------------------------------------------------------------------------
 | Load The Application Routes
 |--------------------------------------------------------------------------
 |
@@ -92,20 +98,10 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 |
 */
 
-$app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
-    require __DIR__.'/../app/Http/routes.php';
+$app->router->group([
+    'namespace' => 'App\Http\Controllers',
+], function ($router) {
+    require __DIR__.'/../routes/web.php';
 });
-
-/*
-|--------------------------------------------------------------------------
-| Load Configuration Files
-|--------------------------------------------------------------------------
-|
-*/
-
-
-$app->configure('auth');
-$app->configure('jwt');
-$app->configure('arduino');
 
 return $app;

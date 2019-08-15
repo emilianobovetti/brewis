@@ -15,7 +15,7 @@ return [
     | since RSA and ECDSA use a private/public key combo (See below).
     |
     */
-    'secret' => env('JWT_SECRET', '5fhgW1eSLQ9AVs92kcEUzDloIezR0Urg'),
+    'secret' => env('JWT_SECRET'),
 
     /*
     |--------------------------------------------------------------------------
@@ -114,7 +114,7 @@ return [
     | for possible values.
     |
     */
-    'algo' => env('JWT_ALGO', 'HS256'),
+    'algo' => 'HS256',
 
     /*
     |--------------------------------------------------------------------------
