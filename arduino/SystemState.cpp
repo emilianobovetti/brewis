@@ -9,6 +9,10 @@
 #define DELTA_TEMPERATURE_EEPROM_ADDRESS \
     TARGET_TEMPERATURE_EEPROM_ADDRESS + sizeof (TARGET_TEMPERATURE_TYPE)
 
+/*
+ * The global system state stores runtime data,
+ * this is our world and source of truth
+ */
 static struct
 {
     DATA_SENDER_STATE_TYPE dataSenderState;
@@ -21,15 +25,15 @@ static struct
 
     CURRENT_TEMPERATURE_TYPE currentTemperature;
 
-} system;
+} world;
 
 void initializeSystemState(void)
 {
-    EEPROM.get(DATA_SENDER_STATE_EEPROM_ADDRESS, system.dataSenderState);
-    EEPROM.get(TARGET_TEMPERATURE_EEPROM_ADDRESS, system.targetTemperature);
-    EEPROM.get(DELTA_TEMPERATURE_EEPROM_ADDRESS, system.deltaTemperature);
+    EEPROM.get(DATA_SENDER_STATE_EEPROM_ADDRESS, world.dataSenderState);
+    EEPROM.get(TARGET_TEMPERATURE_EEPROM_ADDRESS, world.targetTemperature);
+    EEPROM.get(DELTA_TEMPERATURE_EEPROM_ADDRESS, world.deltaTemperature);
 
-    if (system.dataSenderState != OFF_STATE && system.dataSenderState != ON_STATE)
+    if (world.dataSenderState != OFF_STATE && world.dataSenderState != ON_STATE)
     {
         setDataSenderState(OFF_STATE);
     }
@@ -38,8 +42,8 @@ void initializeSystemState(void)
     // warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
     // use union conversion instead
     unsigned int ones = -1;
-    unsigned int targetTemperature = *((unsigned int*) &system.targetTemperature);
-    unsigned int deltaTemperature = *((unsigned int*) &system.deltaTemperature);
+    unsigned int targetTemperature = *((unsigned int*) &world.targetTemperature);
+    unsigned int deltaTemperature = *((unsigned int*) &world.deltaTemperature);
 
     if (targetTemperature == ones)
     {
@@ -51,8 +55,8 @@ void initializeSystemState(void)
         setDeltaTemperature(DEFAULT_DELTA_TEMPERATURE);
     }
 
-    system.heatingSystemState = DISABLED_STATE;
-    system.currentTemperature = UNKNOWN_TEMPERATURE;
+    world.heatingSystemState = DISABLED_STATE;
+    world.currentTemperature = UNKNOWN_TEMPERATURE;
 }
 
 /*
@@ -63,27 +67,27 @@ void initializeSystemState(void)
 
 DATA_SENDER_STATE_TYPE getDataSenderState(void)
 {
-    return system.dataSenderState;
+    return world.dataSenderState;
 }
 
 HEATING_SYSTEM_STATE_TYPE getHeatingSystemState(void)
 {
-    return system.heatingSystemState;
+    return world.heatingSystemState;
 }
 
 TARGET_TEMPERATURE_TYPE getTargetTemperature(void)
 {
-    return system.targetTemperature;
+    return world.targetTemperature;
 }
 
 DELTA_TEMPERATURE_TYPE getDeltaTemperature(void)
 {
-    return system.deltaTemperature;
+    return world.deltaTemperature;
 }
 
 CURRENT_TEMPERATURE_TYPE getCurrentTemperature(void)
 {
-    return system.currentTemperature;
+    return world.currentTemperature;
 }
 
 /*
@@ -94,28 +98,28 @@ CURRENT_TEMPERATURE_TYPE getCurrentTemperature(void)
 
 void setDataSenderState(DATA_SENDER_STATE_TYPE state)
 {
-    system.dataSenderState = state;
-    EEPROM.put(DATA_SENDER_STATE_EEPROM_ADDRESS, system.dataSenderState);
+    world.dataSenderState = state;
+    EEPROM.put(DATA_SENDER_STATE_EEPROM_ADDRESS, world.dataSenderState);
 }
 
 void setHeatingSystemState(HEATING_SYSTEM_STATE_TYPE state)
 {
-    system.heatingSystemState = state;
+    world.heatingSystemState = state;
 }
 
 void setTargetTemperature(TARGET_TEMPERATURE_TYPE temperature)
 {
-    system.targetTemperature = temperature;
-    EEPROM.put(TARGET_TEMPERATURE_EEPROM_ADDRESS, system.targetTemperature);
+    world.targetTemperature = temperature;
+    EEPROM.put(TARGET_TEMPERATURE_EEPROM_ADDRESS, world.targetTemperature);
 }
 
 void setDeltaTemperature(DELTA_TEMPERATURE_TYPE temperature)
 {
-    system.deltaTemperature = temperature;
-    EEPROM.put(DELTA_TEMPERATURE_EEPROM_ADDRESS, system.deltaTemperature);
+    world.deltaTemperature = temperature;
+    EEPROM.put(DELTA_TEMPERATURE_EEPROM_ADDRESS, world.deltaTemperature);
 }
 
 void setCurrentTemperature(CURRENT_TEMPERATURE_TYPE temperature)
 {
-    system.currentTemperature = temperature;
+    world.currentTemperature = temperature;
 }
