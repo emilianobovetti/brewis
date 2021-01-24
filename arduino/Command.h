@@ -6,9 +6,9 @@
 #include "HeatingSystem.h"
 #include "SystemState.h"
 #include "DataSender.h"
-#include "Settings.h"
 #include "Global.h"
 #include "Helper.h"
+#include "Const.h"
 
 /*
  * A command consists in a string of positive integers

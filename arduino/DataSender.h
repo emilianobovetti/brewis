@@ -3,9 +3,9 @@
 
 #include "DataReceiver.h"
 #include "SystemState.h"
-#include "Settings.h"
 #include "Global.h"
 #include "Helper.h"
+#include "Const.h"
 
 /*
  * ---------------------

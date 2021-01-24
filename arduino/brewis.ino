@@ -1,6 +1,6 @@
 #include <TaskScheduler.h>
-#include "Settings.h"
 #include "Global.h"
+#include "Const.h"
 
 #include "TemperatureReader.h"
 #include "ButtonsReader.h"

@@ -2,8 +2,8 @@
 #define __HELPER_H__
 
 #include <Arduino.h>
-#include "Settings.h"
 #include "Global.h"
+#include "Const.h"
 
 void initializeSerial(void);
 

@@ -1,5 +1,5 @@
-#ifndef __SETTINGS_H__
-#define __SETTINGS_H__
+#ifndef __CONST_H__
+#define __CONST_H__
 
 /*
  * -----------
@@ -78,4 +78,4 @@
 #define GLOBAL_STRING_BUFFER_LENGTH 25
 #define GLOBAL_STRING_BUFFER_SIZE GLOBAL_STRING_BUFFER_LENGTH + 1
 
-#endif // __SETTINGS_H__
+#endif // __CONST_H__

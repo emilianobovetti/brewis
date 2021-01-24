@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <EEPROM.h>
-#include "Settings.h"
+#include "Const.h"
 
 #define DATA_SENDER_STATE_TYPE enum OnOffState
 #define HEATING_SYSTEM_STATE_TYPE enum StartStopDisabledState

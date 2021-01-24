@@ -2,10 +2,10 @@
 #define __DATA_RECEIVER_H__
 
 #include <SoftwareSerial.h>
-#include "Settings.h"
 #include "Global.h"
 #include "Command.h"
 #include "Helper.h"
+#include "Const.h"
 
 #define NO_DATA_AVAILABLE -1
 

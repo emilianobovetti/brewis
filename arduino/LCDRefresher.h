@@ -3,8 +3,8 @@
 
 #include "LiquidCrystalImproved.h"
 #include "SystemState.h"
-#include "Settings.h"
 #include "Global.h"
+#include "Const.h"
 
 /*
  * ---------------------
