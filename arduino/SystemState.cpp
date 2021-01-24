@@ -1,11 +1,21 @@
 #include "SystemState.h"
 
+/*
+ * An EEPROM address is equal to previous address
+ * plus byte size of previous stored data:
+ *
+ * +------------+--------------------+
+ * | Address    | Content            |
+ * +------------+--------------------+
+ * | 0          | TARGET_TEMPERATURE |
+ * | 4          | DELTA_TEMPERATURE  |
+ * +------------+--------------------+
+ */
 #define STARTING_EEPROM_ADDRESS 0
 
-#define DATA_SENDER_STATE_EEPROM_ADDRESS \
-    STARTING_EEPROM_ADDRESS
 #define TARGET_TEMPERATURE_EEPROM_ADDRESS \
-    DATA_SENDER_STATE_EEPROM_ADDRESS + sizeof (DATA_SENDER_STATE_TYPE)
+    STARTING_EEPROM_ADDRESS
+
 #define DELTA_TEMPERATURE_EEPROM_ADDRESS \
     TARGET_TEMPERATURE_EEPROM_ADDRESS + sizeof (TARGET_TEMPERATURE_TYPE)
 
@@ -29,34 +39,38 @@ static struct
 
 void initializeSystemState(void)
 {
-    EEPROM.get(DATA_SENDER_STATE_EEPROM_ADDRESS, world.dataSenderState);
+    /*
+     * Set defaults to values that are not read from EEPROM
+     */
+    world.dataSenderState = OFF_STATE;
+    world.heatingSystemState = DISABLED_STATE;
+    world.currentTemperature = UNKNOWN_TEMPERATURE;
+
+    /*
+     * Read data from EEPROM and store in `world`
+     */
     EEPROM.get(TARGET_TEMPERATURE_EEPROM_ADDRESS, world.targetTemperature);
     EEPROM.get(DELTA_TEMPERATURE_EEPROM_ADDRESS, world.deltaTemperature);
 
-    if (world.dataSenderState != OFF_STATE && world.dataSenderState != ON_STATE)
-    {
-        setDataSenderState(OFF_STATE);
-    }
-
-    // TODO
-    // warning: dereferencing type-punned pointer will break strict-aliasing rules [-Wstrict-aliasing]
-    // use union conversion instead
-    unsigned int ones = -1;
-    unsigned int targetTemperature = *((unsigned int*) &world.targetTemperature);
-    unsigned int deltaTemperature = *((unsigned int*) &world.deltaTemperature);
-
-    if (targetTemperature == ones)
+    /*
+     * When EEPROM is empty the read will give all bytes to 1
+     *
+     * A float `f` with a memory representation of `0xffffffff`
+     * is NaN, so we have `f != f`
+     *
+     * In this case we set a default value in both memory and EEPROM
+     *
+     * TODO: check if the given temperature is in a valid range
+     */
+    if (world.targetTemperature != world.targetTemperature)
     {
         setTargetTemperature(DEFAULT_TARGET_TEMPERATURE);
     }
 
-    if (deltaTemperature == ones)
+    if (world.deltaTemperature != world.deltaTemperature)
     {
         setDeltaTemperature(DEFAULT_DELTA_TEMPERATURE);
     }
-
-    world.heatingSystemState = DISABLED_STATE;
-    world.currentTemperature = UNKNOWN_TEMPERATURE;
 }
 
 /*
@@ -99,7 +113,6 @@ CURRENT_TEMPERATURE_TYPE getCurrentTemperature(void)
 void setDataSenderState(DATA_SENDER_STATE_TYPE state)
 {
     world.dataSenderState = state;
-    EEPROM.put(DATA_SENDER_STATE_EEPROM_ADDRESS, world.dataSenderState);
 }
 
 void setHeatingSystemState(HEATING_SYSTEM_STATE_TYPE state)
