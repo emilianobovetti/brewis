@@ -43,7 +43,8 @@ enum CommandKey
     GET_TARGET_TEMPERATURE        = 3,
     GET_DELTA_TEMPERATURE         = 4,
     GET_LCD_STATE                 = 5,
-    GET_CURRENT_TEMPERATURE       = 6,
+    GET_BREWING_TEMPERATURE       = 6,
+    GET_ROOM_TEMPERATURE          = 7,
 
     SET_HEATING_SYSTEM_STATE      = 11,
     SET_DATA_SENDER_STATE         = 12,

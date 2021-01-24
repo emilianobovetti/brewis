@@ -17,41 +17,29 @@ void disableDataSender(void)
     setDataSenderState(OFF_STATE);
 }
 
+void writeTempInGlobalBuffer(char *label, TEMPERATURE_TYPE temp)
+{
+    strcat(globalBuffer, label);
+
+    if (temp == UNKNOWN_TEMPERATURE)
+    {
+        strcat(globalBuffer, unknown);
+    }
+    else
+    {
+        char tmp[8];
+
+        dtostrf(temp, 4, 2, tmp);
+        strcat(globalBuffer, tmp);
+    }
+}
+
 void sendData(void)
 {
     emptyGlobalBuffer();
-    strcat(globalBuffer, "temp=");
 
-    char tmp[8];
-
-    if (getCurrentTemperature() == UNKNOWN_TEMPERATURE)
-    {
-        strcat(globalBuffer, unknown);
-    }
-    else
-    {
-        dtostrf(getCurrentTemperature(), 4, 2, tmp);
-        strcat(globalBuffer, tmp);
-    }
-
-    //////////////////////////
-    // TODO: density reader //
-    //////////////////////////
-    /*
-    strcat(globalBuffer, ",dens=");
-    if (getCurrentDensity() == UNKNOWN_DENSITY)
-    {
-        strcat(globalBuffer, unknown);
-    }
-    else
-    {
-        dtostrf(getCurrentDensity(), 4, 2, tmp);
-        strcat(globalBuffer, tmp);
-    }
-    */
-    //////////////////////////
-    //       end TODO       //
-    //////////////////////////
+    writeTempInGlobalBuffer("temp0=", getBrewingTemperature());
+    writeTempInGlobalBuffer(",temp1=", getRoomTemperature());
 
     // if there are bytes to read, process the input
     // before send data

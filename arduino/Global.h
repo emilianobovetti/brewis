@@ -31,8 +31,9 @@
  * Temperature control and heating system
  * --------------------------------------
  */
-#define DS18B20_BUS_PIN 6
-#define HEATING_SYSTEM_RELAY_PIN 7
+#define TEMP_0_BUS_PIN 8
+#define TEMP_1_BUS_PIN 9
+#define HEATING_SYSTEM_RELAY_PIN 10
 
 #define DEFAULT_TARGET_TEMPERATURE 20
 #define DEFAULT_DELTA_TEMPERATURE 0.25
@@ -58,8 +59,8 @@
 #define LCD_D6_PIN 3
 #define LCD_D5_PIN 4
 #define LCD_D4_PIN 5
-#define LCD_ENABLE_PIN 11
-#define LCD_RS_PIN 12
+#define LCD_ENABLE_PIN 6
+#define LCD_RS_PIN 7
 
 #define LCD_NUM_COLUMNS 16
 #define LCD_NUM_ROWS 2

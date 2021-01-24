@@ -15,6 +15,9 @@ void disableLCDRefresher(void)
     setTaskState(&lcdRefresherTask, NOT_RUNNING);
 }
 
+/*
+ * LCD - rows: 2, cols: 16
+ */
 void refreshLCD(void)
 {
     if (lcd.getState() != LCD_IDLE)
@@ -25,7 +28,10 @@ void refreshLCD(void)
     lcd.clear();
 
     lcd.setCursor(0, 0);
-    lcd.print(getCurrentTemperature());
+    lcd.print("IN: ");
+    lcd.print(getBrewingTemperature());
+    lcd.print("OUT: ");
+    lcd.print(getRoomTemperature());
     lcd.setCursor(0, 1);
 
     lcd.print("HS: ");

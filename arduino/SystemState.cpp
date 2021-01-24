@@ -18,7 +18,7 @@
     STARTING_EEPROM_ADDRESS
 
 #define DELTA_TEMPERATURE_EEPROM_ADDRESS \
-    TARGET_TEMPERATURE_EEPROM_ADDRESS + sizeof (TARGET_TEMPERATURE_TYPE)
+    TARGET_TEMPERATURE_EEPROM_ADDRESS + sizeof (TEMPERATURE_TYPE)
 
 /*
  * The global system state stores runtime data,
@@ -30,12 +30,13 @@ static struct
 
     HEATING_SYSTEM_STATE_TYPE heatingSystemState;
 
-    TARGET_TEMPERATURE_TYPE targetTemperature;
+    TEMPERATURE_TYPE targetTemperature;
 
-    DELTA_TEMPERATURE_TYPE deltaTemperature;
+    TEMPERATURE_TYPE deltaTemperature;
 
-    CURRENT_TEMPERATURE_TYPE currentTemperature;
+    TEMPERATURE_TYPE brewingTemperature;
 
+    TEMPERATURE_TYPE roomTemperature;
 } world;
 
 void initializeSystemState(void)
@@ -45,7 +46,8 @@ void initializeSystemState(void)
      */
     world.dataSenderState = OFF_STATE;
     world.heatingSystemState = DISABLED_STATE;
-    world.currentTemperature = UNKNOWN_TEMPERATURE;
+    world.brewingTemperature = UNKNOWN_TEMPERATURE;
+    world.roomTemperature = UNKNOWN_TEMPERATURE;
 
     /*
      * Read data from EEPROM and store in `world`
@@ -90,19 +92,24 @@ HEATING_SYSTEM_STATE_TYPE getHeatingSystemState(void)
     return world.heatingSystemState;
 }
 
-TARGET_TEMPERATURE_TYPE getTargetTemperature(void)
+TEMPERATURE_TYPE getTargetTemperature(void)
 {
     return world.targetTemperature;
 }
 
-DELTA_TEMPERATURE_TYPE getDeltaTemperature(void)
+TEMPERATURE_TYPE getDeltaTemperature(void)
 {
     return world.deltaTemperature;
 }
 
-CURRENT_TEMPERATURE_TYPE getCurrentTemperature(void)
+TEMPERATURE_TYPE getBrewingTemperature(void)
 {
-    return world.currentTemperature;
+    return world.brewingTemperature;
+}
+
+TEMPERATURE_TYPE getRoomTemperature(void)
+{
+    return world.roomTemperature;
 }
 
 /*
@@ -121,19 +128,24 @@ void setHeatingSystemState(HEATING_SYSTEM_STATE_TYPE state)
     world.heatingSystemState = state;
 }
 
-void setTargetTemperature(TARGET_TEMPERATURE_TYPE temperature)
+void setTargetTemperature(TEMPERATURE_TYPE temperature)
 {
     world.targetTemperature = temperature;
     EEPROM.put(TARGET_TEMPERATURE_EEPROM_ADDRESS, world.targetTemperature);
 }
 
-void setDeltaTemperature(DELTA_TEMPERATURE_TYPE temperature)
+void setDeltaTemperature(TEMPERATURE_TYPE temperature)
 {
     world.deltaTemperature = temperature;
     EEPROM.put(DELTA_TEMPERATURE_EEPROM_ADDRESS, world.deltaTemperature);
 }
 
-void setCurrentTemperature(CURRENT_TEMPERATURE_TYPE temperature)
+void setBrewingTemperature(TEMPERATURE_TYPE temperature)
 {
-    world.currentTemperature = temperature;
+    world.brewingTemperature = temperature;
+}
+
+void setRoomTemperature(TEMPERATURE_TYPE temperature)
+{
+    world.roomTemperature = temperature;
 }

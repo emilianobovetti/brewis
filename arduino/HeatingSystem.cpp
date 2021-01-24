@@ -49,13 +49,13 @@ void checkHeatingSystem(void)
 {
     float maxTemperature = getTargetTemperature() + getDeltaTemperature();
     float minTemperature = getTargetTemperature() - getDeltaTemperature();
-    float currentTemperature = getCurrentTemperature();
+    float brewingTemperature = getBrewingTemperature();
 
-    if (currentTemperature < minTemperature)
+    if (brewingTemperature < minTemperature)
     {
         startHeatingSystem();
     }
-    else if (currentTemperature > maxTemperature)
+    else if (brewingTemperature > maxTemperature)
     {
         stopHeatingSystem();
     }

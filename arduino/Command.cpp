@@ -159,15 +159,27 @@ void handleGetLCDState(void)
     }
 }
 
-void handleGetCurrentTemperature(void)
+void handleGetBrewingTemperature(void)
 {
-    if (getCurrentTemperature() == UNKNOWN_TEMPERATURE)
+    if (getBrewingTemperature() == UNKNOWN_TEMPERATURE)
     {
         writeStrInBuffer(unknown);
     }
     else
     {
-        writeFloatInBuffer(getCurrentTemperature());
+        writeFloatInBuffer(getBrewingTemperature());
+    }
+}
+
+void handleGetRoomTemperature(void)
+{
+    if (getRoomTemperature() == UNKNOWN_TEMPERATURE)
+    {
+        writeStrInBuffer(unknown);
+    }
+    else
+    {
+        writeFloatInBuffer(getRoomTemperature());
     }
 }
 
@@ -299,8 +311,11 @@ void runCommand(Command cmd)
         case GET_LCD_STATE:
             handleGetLCDState();
             break;
-        case GET_CURRENT_TEMPERATURE:
-            handleGetCurrentTemperature();
+        case GET_BREWING_TEMPERATURE:
+            handleGetBrewingTemperature();
+            break;
+        case GET_ROOM_TEMPERATURE:
+            handleGetRoomTemperature();
             break;
 
         case SET_HEATING_SYSTEM_STATE:
