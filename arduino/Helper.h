@@ -4,8 +4,6 @@
 #include <Arduino.h>
 #include "Global.h"
 
-void initializeSerial(void);
-
 void emptyString(char *str, uint8_t dim);
 
 void emptyGlobalBuffer(void);

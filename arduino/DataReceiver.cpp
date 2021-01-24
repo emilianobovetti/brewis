@@ -4,14 +4,12 @@ static Command cmd;
 
 void initializeDataReceiver(void)
 {
-    initializeSerial();
-
     flushCommand(cmd);
 }
 
 inline bool timeoutExpired(time_t noDataSince)
 {
-    return noDataSince > 0 && millis() - noDataSince > DATA_RECEIVER_TIMEOUT;
+    return noDataSince > 0 && millis() - noDataSince > DATA_RECEIVER_TIMEOUT_MS;
 }
 
 void readInputData(void)

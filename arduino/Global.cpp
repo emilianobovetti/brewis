@@ -2,8 +2,6 @@
 
 LiquidCrystalImproved lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
-SoftwareSerial bluetooth(BLUETOOTH_TX_PIN, BLUETOOTH_RX_PIN);
-
 char globalBuffer[GLOBAL_STRING_BUFFER_SIZE];
 
 const char *heatingSystem  = "heating system";

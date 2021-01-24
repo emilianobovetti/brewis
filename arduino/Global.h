@@ -21,19 +21,10 @@
  * Serial communication
  * --------------------
  */
-// can be "Serial" or "bluetooth"
-#define COMM_SERIAL bluetooth
+#define COMM_SERIAL Serial
 #define COMM_SERIAL_BAUD_RATE 9600
 
-#define DATA_RECEIVER_TIMEOUT 2000
-
-/*
- * ---------
- * Bluetooth
- * ---------
- */
-#define BLUETOOTH_TX_PIN 8
-#define BLUETOOTH_RX_PIN 9
+#define DATA_RECEIVER_TIMEOUT_MS 2000
 
 /*
  * --------------------------------------
@@ -88,8 +79,6 @@
  */
 
 extern LiquidCrystalImproved lcd;
-
-extern SoftwareSerial bluetooth;
 
 /*
  * --------------------

@@ -22,7 +22,7 @@ void initializeDataReceiver(void);
  * then executes it.
  *
  * If doesn't receive the COMMAND_TERMINATOR character
- * waits for DATA_RECEIVER_TIMEOUT, then sets the command key
+ * waits for DATA_RECEIVER_TIMEOUT_MS, then sets the command key
  * to TIMEOUT_EXPIRED and executes it.
  *
  * If finds an unkown character, sets the command key to

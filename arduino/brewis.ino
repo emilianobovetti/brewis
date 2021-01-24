@@ -11,6 +11,8 @@
 
 void setup(void)
 {
+    COMM_SERIAL.begin(COMM_SERIAL_BAUD_RATE);
+
     initializeSystemState();
     initializeDataReceiver();
     initializeDataSender();

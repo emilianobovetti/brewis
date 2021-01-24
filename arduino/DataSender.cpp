@@ -2,8 +2,6 @@
 
 void initializeDataSender(void)
 {
-    initializeSerial();
-
     disableDataSender();
 }
 
