@@ -6,6 +6,7 @@
 
 #define DATA_SENDER_STATE_TYPE enum OnOffState
 #define HEATING_SYSTEM_STATE_TYPE enum StartStopDisabledState
+#define LCD_STATE_TYPE enum OnOffState
 #define TEMPERATURE_TYPE float
 
 /*
@@ -37,6 +38,8 @@ DATA_SENDER_STATE_TYPE getDataSenderState(void);
 
 HEATING_SYSTEM_STATE_TYPE getHeatingSystemState(void);
 
+LCD_STATE_TYPE getLCDState(void);
+
 TEMPERATURE_TYPE getTargetTemperature(void);
 
 TEMPERATURE_TYPE getDeltaTemperature(void);
@@ -54,6 +57,8 @@ TEMPERATURE_TYPE getRoomTemperature(void);
 void setDataSenderState(DATA_SENDER_STATE_TYPE);
 
 void setHeatingSystemState(HEATING_SYSTEM_STATE_TYPE);
+
+void setLCDState(LCD_STATE_TYPE);
 
 void setTargetTemperature(TEMPERATURE_TYPE);
 

@@ -6,7 +6,7 @@
 #include "DataSender.h"
 #include "HeatingSystem.h"
 #include "TemperatureReader.h"
-#include "LCDRefresher.h"
+#include "LCD.h"
 
 DECLARE_TASK(dataSenderTask);
 DECLARE_TASK(heatingSystemTask);

@@ -2,7 +2,6 @@
 #define __GLOBAL_H__
 
 #include <SoftwareSerial.h>
-#include "LiquidCrystalImproved.h"
 
 /*
  * -----------
@@ -35,7 +34,7 @@
 #define TEMP_1_BUS_PIN 9
 #define HEATING_SYSTEM_RELAY_PIN 10
 
-#define DEFAULT_TARGET_TEMPERATURE 20
+#define DEFAULT_TARGET_TEMPERATURE 18
 #define DEFAULT_DELTA_TEMPERATURE 0.25
 
 #define UNKNOWN_TEMPERATURE -127.0
@@ -45,15 +44,16 @@
  * Buttons
  * -------
  */
-#define BUTTONS_ANALOG_PIN A0_PIN
-#define SLEEP_BUTTONS_AFTER_PRESSED 2000
+#define SWITCH_0_PIN A1_PIN
+#define SWITCH_1_PIN A2_PIN
+#define SWITCH_2_PIN A3_PIN
 
 /*
  * ---
  * LCD
  * ---
  */
-#define LCD_BACKLIGHT_SUPPLY A1_PIN
+#define LCD_BACKLIGHT_SUPPLY A0_PIN
 
 #define LCD_D7_PIN 2
 #define LCD_D6_PIN 3
@@ -72,14 +72,6 @@
  */
 #define GLOBAL_STRING_BUFFER_LENGTH 25
 #define GLOBAL_STRING_BUFFER_SIZE GLOBAL_STRING_BUFFER_LENGTH + 1
-
-/*
- * ----------------
- * Global resources
- * ----------------
- */
-
-extern LiquidCrystalImproved lcd;
 
 /*
  * --------------------

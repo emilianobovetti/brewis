@@ -2,17 +2,18 @@
 #include "Global.h"
 
 #include "TemperatureReader.h"
-#include "ButtonsReader.h"
+#include "SwitchesReader.h"
 #include "HeatingSystem.h"
-#include "LCDRefresher.h"
 #include "DataReceiver.h"
 #include "SystemState.h"
 #include "DataSender.h"
+#include "LCD.h"
 
 void setup(void)
 {
     COMM_SERIAL.begin(COMM_SERIAL_BAUD_RATE);
 
+    initializeSwitchesReader();
     initializeSystemState();
     initializeDataReceiver();
     initializeDataSender();
@@ -31,7 +32,7 @@ void setup(void)
 
 void loop(void)
 {
-    readButtons();
+    readSwitches();
     readInputData();
 
     runScheduledTasks();

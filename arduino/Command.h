@@ -46,11 +46,8 @@ enum CommandKey
     GET_BREWING_TEMPERATURE       = 6,
     GET_ROOM_TEMPERATURE          = 7,
 
-    SET_HEATING_SYSTEM_STATE      = 11,
-    SET_DATA_SENDER_STATE         = 12,
     SET_TARGET_TEMPERATURE        = 13,
     SET_DELTA_TEMPERATURE         = 14,
-    SET_LCD_STATE                 = 15,
 
     SET_HEATING_SYSTEM_TIMING     = 21,
     SET_DATA_SENDER_TIMING        = 22,

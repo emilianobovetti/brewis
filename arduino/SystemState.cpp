@@ -30,6 +30,8 @@ static struct
 
     HEATING_SYSTEM_STATE_TYPE heatingSystemState;
 
+    LCD_STATE_TYPE  lcdState;
+
     TEMPERATURE_TYPE targetTemperature;
 
     TEMPERATURE_TYPE deltaTemperature;
@@ -46,6 +48,7 @@ void initializeSystemState(void)
      */
     world.dataSenderState = OFF_STATE;
     world.heatingSystemState = DISABLED_STATE;
+    world.lcdState = OFF_STATE;
     world.brewingTemperature = UNKNOWN_TEMPERATURE;
     world.roomTemperature = UNKNOWN_TEMPERATURE;
 
@@ -92,6 +95,11 @@ HEATING_SYSTEM_STATE_TYPE getHeatingSystemState(void)
     return world.heatingSystemState;
 }
 
+LCD_STATE_TYPE getLCDState(void)
+{
+    return world.lcdState;
+}
+
 TEMPERATURE_TYPE getTargetTemperature(void)
 {
     return world.targetTemperature;
@@ -126,6 +134,11 @@ void setDataSenderState(DATA_SENDER_STATE_TYPE state)
 void setHeatingSystemState(HEATING_SYSTEM_STATE_TYPE state)
 {
     world.heatingSystemState = state;
+}
+
+void setLCDState(LCD_STATE_TYPE state)
+{
+    world.lcdState = state;
 }
 
 void setTargetTemperature(TEMPERATURE_TYPE temperature)

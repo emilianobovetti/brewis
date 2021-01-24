@@ -1,7 +1,7 @@
-#ifndef __LCD_REFRESHER_H__
-#define __LCD_REFRESHER_H__
+#ifndef __LCD_H__
+#define __LCD_H__
 
-#include "LiquidCrystalImproved.h"
+#include <LiquidCrystal.h>
 #include "SystemState.h"
 #include "Tasks.h"
 
@@ -23,6 +23,10 @@ void enableLCDRefresher(void);
 
 void disableLCDRefresher(void);
 
+void enableLCD(void);
+
+void disableLCD(void);
+
 /*
  * -------------
  * Task callback
@@ -31,4 +35,4 @@ void disableLCDRefresher(void);
 
 void refreshLCD(void);
 
-#endif // __LCD_REFRESHER_H__
+#endif // __LCD_H__

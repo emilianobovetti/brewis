@@ -1,8 +1,10 @@
-#include "LCDRefresher.h"
+#include "LCD.h"
+
+LiquidCrystal lcd(LCD_RS_PIN, LCD_ENABLE_PIN, LCD_D4_PIN, LCD_D5_PIN, LCD_D6_PIN, LCD_D7_PIN);
 
 void initializeLCDRefresher(void)
 {
-    lcd.begin(LCD_NUM_COLUMNS, LCD_NUM_ROWS, LCD_BACKLIGHT_SUPPLY);
+    lcd.begin(LCD_NUM_COLUMNS, LCD_NUM_ROWS);
 }
 
 void enableLCDRefresher(void)
@@ -15,22 +17,29 @@ void disableLCDRefresher(void)
     setTaskState(&lcdRefresherTask, NOT_RUNNING);
 }
 
+void enableLCD(void)
+{
+    digitalWrite(LCD_BACKLIGHT_SUPPLY, HIGH);
+    setLCDState(ON_STATE);
+}
+
+void disableLCD(void)
+{
+    digitalWrite(LCD_BACKLIGHT_SUPPLY, LOW);
+    setLCDState(OFF_STATE);
+}
+
 /*
  * LCD - rows: 2, cols: 16
  */
 void refreshLCD(void)
 {
-    if (lcd.getState() != LCD_IDLE)
-    {
-        return;
-    }
-
     lcd.clear();
 
     lcd.setCursor(0, 0);
     lcd.print("IN: ");
     lcd.print(getBrewingTemperature());
-    lcd.print("OUT: ");
+    lcd.print(" OUT: ");
     lcd.print(getRoomTemperature());
     lcd.setCursor(0, 1);
 

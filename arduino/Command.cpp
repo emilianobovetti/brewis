@@ -149,7 +149,7 @@ void handleGetDeltaTemperature(void)
 
 void handleGetLCDState(void)
 {
-    if (lcd.getState() == LCD_OFF)
+    if (getLCDState() == OFF_STATE)
     {
         writeStrInBuffer(off);
     }
@@ -189,34 +189,6 @@ void handleGetRoomTemperature(void)
  * -------------------
  */
 
-void handleSetHeatingSystemState(Command cmd)
-{
-    char res = handleOnOffCommand(cmd);
-
-    if (res == 1)
-    {
-        enableHeatingSystem();
-    }
-    else if (res == 0)
-    {
-        disableHeatingSystem();
-    }
-}
-
-void handleSetDataSenderState(Command cmd)
-{
-    char res = handleOnOffCommand(cmd);
-
-    if (res == 1)
-    {
-        enableDataSender();
-    }
-    else if (res == 0)
-    {
-        disableDataSender();
-    }
-}
-
 void handleSetTargetTemperature(Command cmd)
 {
     float targetTemperature = handleFloatCommand(cmd);
@@ -239,20 +211,6 @@ void handleSetDeltaTemperature(Command cmd)
     }
 
     setDeltaTemperature(deltaTemperature);
-}
-
-void handleSetLCDState(Command cmd)
-{
-    char res = handleOnOffCommand(cmd);
-
-    if (res == 1)
-    {
-        lcd.on();
-    }
-    else if (res == 0)
-    {
-        lcd.off();
-    }
 }
 
 /*
@@ -318,20 +276,11 @@ void runCommand(Command cmd)
             handleGetRoomTemperature();
             break;
 
-        case SET_HEATING_SYSTEM_STATE:
-            handleSetHeatingSystemState(cmd);
-            break;
-        case SET_DATA_SENDER_STATE:
-            handleSetDataSenderState(cmd);
-            break;
         case SET_TARGET_TEMPERATURE:
             handleSetTargetTemperature(cmd);
             break;
         case SET_DELTA_TEMPERATURE:
             handleSetDeltaTemperature(cmd);
-            break;
-        case SET_LCD_STATE:
-            handleSetLCDState(cmd);
             break;
 
         case SET_HEATING_SYSTEM_TIMING:
