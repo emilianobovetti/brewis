@@ -2,25 +2,8 @@
 #define __GLOBAL_H__
 
 #include <SoftwareSerial.h>
-#include <TaskScheduler.h>
 #include "LiquidCrystalImproved.h"
 #include "Const.h"
-
-#include "TemperatureReader.h"
-#include "HeatingSystem.h"
-#include "LCDRefresher.h"
-#include "DataSender.h"
-
-/*
- * -----------------
- * Tasks declaration
- * -----------------
- */
-
-DECLARE_TASK(dataSenderTask);
-DECLARE_TASK(heatingSystemTask);
-DECLARE_TASK(temperatureReaderTask);
-DECLARE_TASK(lcdRefresherTask);
 
 /*
  * ----------------

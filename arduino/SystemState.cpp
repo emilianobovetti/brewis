@@ -1,4 +1,5 @@
 #include "SystemState.h"
+#include <EEPROM.h>
 
 /*
  * An EEPROM address is equal to previous address

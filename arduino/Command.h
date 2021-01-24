@@ -6,7 +6,7 @@
 #include "HeatingSystem.h"
 #include "SystemState.h"
 #include "DataSender.h"
-#include "Global.h"
+#include "Tasks.h"
 #include "Helper.h"
 #include "Const.h"
 
