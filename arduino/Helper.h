@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include "Global.h"
-#include "Const.h"
 
 void initializeSerial(void);
 

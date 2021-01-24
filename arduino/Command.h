@@ -8,7 +8,6 @@
 #include "DataSender.h"
 #include "Tasks.h"
 #include "Helper.h"
-#include "Const.h"
 
 /*
  * A command consists in a string of positive integers

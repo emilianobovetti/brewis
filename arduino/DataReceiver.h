@@ -5,7 +5,6 @@
 #include "Global.h"
 #include "Command.h"
 #include "Helper.h"
-#include "Const.h"
 
 #define NO_DATA_AVAILABLE -1
 

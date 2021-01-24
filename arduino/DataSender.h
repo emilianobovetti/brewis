@@ -5,7 +5,6 @@
 #include "SystemState.h"
 #include "Global.h"
 #include "Helper.h"
-#include "Const.h"
 
 /*
  * ---------------------

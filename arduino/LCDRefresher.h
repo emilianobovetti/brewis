@@ -4,7 +4,6 @@
 #include "LiquidCrystalImproved.h"
 #include "SystemState.h"
 #include "Tasks.h"
-#include "Const.h"
 
 /*
  * ---------------------
