@@ -4,6 +4,8 @@
 #include <Arduino.h>
 #include "Global.h"
 
+bool isValidTemperature(float temp);
+
 void emptyString(char *str, uint8_t dim);
 
 void emptyGlobalBuffer(void);

@@ -12,7 +12,7 @@ void initializeSwitchesReader(void)
  */
 void checkSwitch0(void)
 {
-    bool isSwitchOn = digitalRead(SWITCH_1_PIN) == LOW;
+    bool isSwitchOn = digitalRead(SWITCH_0_PIN) == LOW;
     bool isLCDOn = getLCDState() == ON_STATE;
 
     if (!isLCDOn && isSwitchOn)

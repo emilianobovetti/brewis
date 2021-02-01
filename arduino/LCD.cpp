@@ -19,7 +19,7 @@ void disableLCDRefresher(void)
 
 void enableLCD(void)
 {
-    digitalWrite(LCD_BACKLIGHT_SUPPLY, HIGH);
+    analogWrite(LCD_BACKLIGHT_SUPPLY, 255);
     setLCDState(ON_STATE);
 }
 

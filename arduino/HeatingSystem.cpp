@@ -7,6 +7,36 @@ void initializeHeatingSystem(void)
     disableHeatingSystem();
 }
 
+void forceStartHeatingSystem(void)
+{
+    digitalWrite(HEATING_SYSTEM_RELAY_PIN, LOW);
+    setHeatingSystemState(STARTED_STATE);
+}
+
+void startHeatingSystem(void)
+{
+    // if heating system state is disabled or already started
+    // we don't have to do nothing
+    if (getHeatingSystemState() == STOPPED_STATE)
+    {
+        forceStartHeatingSystem();
+    }
+}
+
+void forceStopHeatingSystem(void)
+{
+    digitalWrite(HEATING_SYSTEM_RELAY_PIN, HIGH);
+    setHeatingSystemState(STOPPED_STATE);
+}
+
+void stopHeatingSystem(void)
+{
+    if (getHeatingSystemState() == STARTED_STATE)
+    {
+        forceStopHeatingSystem();
+    }
+}
+
 void enableHeatingSystem(void)
 {
     setTaskState(&heatingSystemTask, RUNNING);
@@ -17,39 +47,23 @@ void enableHeatingSystem(void)
 void disableHeatingSystem(void)
 {
     setTaskState(&heatingSystemTask, NOT_RUNNING);
-    /*
-     * stopHeatingSystem() must be called before
-     * heating_system_state goes on DISABLED_STATE
-     */
-    stopHeatingSystem();
+    forceStopHeatingSystem();
     setHeatingSystemState(DISABLED_STATE);
-}
-
-void startHeatingSystem(void)
-{
-    // if heating system state is disabled or already started
-    // we don't have to do nothing
-    if (getHeatingSystemState() == STOPPED_STATE)
-    {
-        digitalWrite(HEATING_SYSTEM_RELAY_PIN, HIGH);
-        setHeatingSystemState(STARTED_STATE);
-    }
-}
-
-void stopHeatingSystem(void)
-{
-    if (getHeatingSystemState() == STARTED_STATE)
-    {
-        digitalWrite(HEATING_SYSTEM_RELAY_PIN, LOW);
-        setHeatingSystemState(STOPPED_STATE);
-    }
 }
 
 void checkHeatingSystem(void)
 {
+    float brewingTemperature = getBrewingTemperature();
+    bool isTemperatureInvalid = !isValidTemperature(brewingTemperature);
+    bool isHeatingSystemDisabled = getHeatingSystemState() == DISABLED_STATE;
+
+    if (isTemperatureInvalid || isHeatingSystemDisabled)
+    {
+        return;
+    }
+
     float maxTemperature = getTargetTemperature() + getDeltaTemperature();
     float minTemperature = getTargetTemperature() - getDeltaTemperature();
-    float brewingTemperature = getBrewingTemperature();
 
     if (brewingTemperature < minTemperature)
     {
