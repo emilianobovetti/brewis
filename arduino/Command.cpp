@@ -1,25 +1,5 @@
 #include "Command.h"
 
-char tmp[8];
-
-/*
- * -----------------------
- * Buffer writer functions
- * -----------------------
- */
-
-inline void writeStrInBuffer(const char *str)
-{
-    strcat(globalBuffer, str);
-}
-
-inline void writeFloatInBuffer(float f)
-{
-    emptyString(tmp, 8);
-    dtostrf(f, 4, 2, tmp);
-    writeStrInBuffer(tmp);
-}
-
 /*
  * ----------------
  * Helper functions
@@ -30,23 +10,23 @@ char handleOnOffCommand(Command cmd)
 {
     if (cmd[1] == 1)
     {
-        writeStrInBuffer(ack);
-        writeStrInBuffer(space);
-        writeStrInBuffer(on);
+        writeStringInGlobalBuffer(ack);
+        writeStringInGlobalBuffer(space);
+        writeStringInGlobalBuffer(on);
 
         return 1;
     }
     else if (cmd[1] == 0)
     {
-        writeStrInBuffer(ack);
-        writeStrInBuffer(space);
-        writeStrInBuffer(off);
+        writeStringInGlobalBuffer(ack);
+        writeStringInGlobalBuffer(space);
+        writeStringInGlobalBuffer(off);
 
         return 0;
     }
     else
     {
-        writeStrInBuffer(error);
+        writeStringInGlobalBuffer(error);
 
         return -1;
     }
@@ -72,7 +52,7 @@ float handleFloatCommand(Command cmd)
 
     if (cmd[1] == NULL_COMMAND_KEY)
     {
-        writeStrInBuffer(error);
+        writeStringInGlobalBuffer(error);
 
         return NAN;
     }
@@ -80,9 +60,9 @@ float handleFloatCommand(Command cmd)
     {
         value += cmd[1];
 
-        writeStrInBuffer(ack);
-        writeStrInBuffer(space);
-        writeFloatInBuffer(value);
+        writeStringInGlobalBuffer(ack);
+        writeStringInGlobalBuffer(space);
+        writeFloatInGlobalBuffer(value, 4, 2);
 
         return value;
     }
@@ -93,13 +73,13 @@ void handleTimingCommand(Command cmd, ScheduledTask *task)
 {
     if (cmd[1] == NULL_COMMAND_KEY)
     {
-        writeStrInBuffer(error);
+        writeStringInGlobalBuffer(error);
     }
     else
     {
         setTaskRunEvery(task, cmd[1]);
-        writeStrInBuffer(ack);
-        writeStrInBuffer(space);
+        writeStringInGlobalBuffer(ack);
+        writeStringInGlobalBuffer(space);
     }
 }
 
@@ -113,15 +93,15 @@ void handleGetHeatingSystemState(void)
 {
     if (getHeatingSystemState() == STARTED_STATE)
     {
-        writeStrInBuffer(started);
+        writeStringInGlobalBuffer(started);
     }
     else if (getHeatingSystemState() == STOPPED_STATE)
     {
-        writeStrInBuffer(stopped);
+        writeStringInGlobalBuffer(stopped);
     }
     else
     {
-        writeStrInBuffer(disabled);
+        writeStringInGlobalBuffer(disabled);
     }
 }
 
@@ -129,33 +109,33 @@ void handleGetDataSenderState(void)
 {
     if (getDataSenderState() == ON_STATE)
     {
-        writeStrInBuffer(on);
+        writeStringInGlobalBuffer(on);
     }
     else
     {
-        writeStrInBuffer(off);
+        writeStringInGlobalBuffer(off);
     }
 }
 
 void handleGetTargetTemperature(void)
 {
-    writeFloatInBuffer(getTargetTemperature());
+    writeFloatInGlobalBuffer(getTargetTemperature(), 4, 2);
 }
 
 void handleGetDeltaTemperature(void)
 {
-    writeFloatInBuffer(getDeltaTemperature());
+    writeFloatInGlobalBuffer(getDeltaTemperature(), 4, 2);
 }
 
 void handleGetLCDState(void)
 {
     if (getLCDState() == OFF_STATE)
     {
-        writeStrInBuffer(off);
+        writeStringInGlobalBuffer(off);
     }
     else
     {
-        writeStrInBuffer(on);
+        writeStringInGlobalBuffer(on);
     }
 }
 
@@ -163,11 +143,11 @@ void handleGetBrewingTemperature(void)
 {
     if (getBrewingTemperature() == UNKNOWN_TEMPERATURE)
     {
-        writeStrInBuffer(unknown);
+        writeStringInGlobalBuffer(unknown);
     }
     else
     {
-        writeFloatInBuffer(getBrewingTemperature());
+        writeFloatInGlobalBuffer(getBrewingTemperature(), 4, 2);
     }
 }
 
@@ -175,11 +155,11 @@ void handleGetRoomTemperature(void)
 {
     if (getRoomTemperature() == UNKNOWN_TEMPERATURE)
     {
-        writeStrInBuffer(unknown);
+        writeStringInGlobalBuffer(unknown);
     }
     else
     {
-        writeFloatInBuffer(getRoomTemperature());
+        writeFloatInGlobalBuffer(getRoomTemperature(), 4, 2);
     }
 }
 
@@ -252,7 +232,7 @@ void runCommand(Command cmd)
     switch (cmd[0])
     {
         case GET_ACK:
-            writeStrInBuffer(ack);
+            writeStringInGlobalBuffer(ack);
             break;
         case GET_HEATING_SYSTEM_STATE:
             handleGetHeatingSystemState();
@@ -297,16 +277,16 @@ void runCommand(Command cmd)
             break;
 
         case TIMEOUT_EXPIRED:
-            writeStrInBuffer("TE");
+            writeStringInGlobalBuffer("TE");
             break;
         case UNRECOGNIZED_CHAR:
-            writeStrInBuffer("UC");
+            writeStringInGlobalBuffer("UC");
             break;
         case NULL_COMMAND_KEY:
-            writeStrInBuffer("NCK");
+            writeStringInGlobalBuffer("NCK");
             break;
         default:
-            writeStrInBuffer(error);
+            writeStringInGlobalBuffer(error);
     }
 
     COMM_SERIAL.println(globalBuffer);

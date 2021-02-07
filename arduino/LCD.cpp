@@ -37,43 +37,55 @@ void refreshLCD(void)
     lcd.clear();
 
     lcd.setCursor(0, 0);
-    lcd.print("IN: ");
-    lcd.print(getBrewingTemperature());
-    lcd.print(" OUT: ");
-    lcd.print(getRoomTemperature());
-    lcd.setCursor(0, 1);
+    emptyGlobalBuffer();
+    writeStringInGlobalBuffer("IN:");
+    writeTemperatureInGlobalBuffer(getBrewingTemperature());
 
-    lcd.print("HS: ");
+    writeStringInGlobalBuffer(space);
+    writeStringInGlobalBuffer("OUT:");
+    writeTemperatureInGlobalBuffer(getRoomTemperature());
+
+    lcd.print(globalBuffer);
+
+    lcd.setCursor(0, 1);
+    emptyGlobalBuffer();
+    writeStringInGlobalBuffer("HS:");
+    writeStringInGlobalBuffer(space);
 
     switch (getHeatingSystemState())
     {
         case STARTED_STATE:
-            lcd.print(on);
-            lcd.print(space);
-            lcd.print(space);
+            writeStringInGlobalBuffer(on);
+            writeStringInGlobalBuffer(space);
+            writeStringInGlobalBuffer(space);
             break;
         case DISABLED_STATE:
-            lcd.print(off);
-            lcd.print(space);
+            writeStringInGlobalBuffer(off);
+            writeStringInGlobalBuffer(space);
             break;
         case STOPPED_STATE:
-            lcd.print("idle");
+            writeStringInGlobalBuffer("idle");
             break;
         default:
-            lcd.print(error);
-            lcd.print(space);
+            writeStringInGlobalBuffer(error);
+            writeStringInGlobalBuffer(space);
     }
 
-    lcd.print(" DS: ");
+    writeStringInGlobalBuffer(space);
+    writeStringInGlobalBuffer("DS:");
+    writeStringInGlobalBuffer(space);
+
     switch (getDataSenderState())
     {
         case ON_STATE:
-            lcd.print(on);
+            writeStringInGlobalBuffer(on);
             break;
         case OFF_STATE:
-            lcd.print(off);
+            writeStringInGlobalBuffer(off);
             break;
         default:
-            lcd.print(error);
+            writeStringInGlobalBuffer(error);
     }
+
+    lcd.print(globalBuffer);
 }

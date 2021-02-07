@@ -38,8 +38,10 @@ void sendData(void)
 {
     emptyGlobalBuffer();
 
-    writeTempInGlobalBuffer("temp0=", getBrewingTemperature());
-    writeTempInGlobalBuffer(",temp1=", getRoomTemperature());
+    writeStringInGlobalBuffer("temp0=");
+    writeTemperatureInGlobalBuffer(getBrewingTemperature());
+    writeStringInGlobalBuffer(",temp1=");
+    writeTemperatureInGlobalBuffer(getRoomTemperature());
 
     // if there are bytes to read, process the input
     // before send data
