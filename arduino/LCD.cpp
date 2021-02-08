@@ -29,9 +29,6 @@ void disableLCD(void)
     setLCDState(OFF_STATE);
 }
 
-/*
- * LCD - rows: 2, cols: 16
- */
 void refreshLCD(void)
 {
     lcd.clear();
