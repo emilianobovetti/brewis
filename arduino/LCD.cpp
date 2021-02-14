@@ -31,8 +31,6 @@ void disableLCD(void)
 
 void refreshLCD(void)
 {
-    lcd.clear();
-
     lcd.setCursor(0, 0);
     emptyGlobalBuffer();
     writeStringInGlobalBuffer("IN:");
@@ -42,10 +40,12 @@ void refreshLCD(void)
     writeStringInGlobalBuffer("OUT:");
     writeTemperatureInGlobalBuffer(getRoomTemperature());
 
+    padGlobalBufferWithSpaces(16);
     lcd.print(globalBuffer);
 
     lcd.setCursor(0, 1);
     emptyGlobalBuffer();
+
     writeStringInGlobalBuffer("HS:");
     writeStringInGlobalBuffer(space);
 
@@ -84,5 +84,6 @@ void refreshLCD(void)
             writeStringInGlobalBuffer(error);
     }
 
+    padGlobalBufferWithSpaces(16);
     lcd.print(globalBuffer);
 }

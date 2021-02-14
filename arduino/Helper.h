@@ -10,6 +10,8 @@ void emptyString(char *str, uint8_t dim);
 
 void emptyGlobalBuffer(void);
 
+void padGlobalBufferWithSpaces(uint8_t target);
+
 void writeStringInGlobalBuffer(const char *str);
 
 void writeFloatInGlobalBuffer(float val, signed char width, unsigned char prec);
