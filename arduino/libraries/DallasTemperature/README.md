@@ -9,11 +9,17 @@ This library supports the following devices :
 * DS18S20 - Please note there appears to be an issue with this series.
 * DS1822
 * DS1820
+* MAX31820
 
 
 You will need a pull-up resistor of about 5 KOhm between the 1-Wire data line
 and your 5V power. If you are using the DS18B20, ground pins 1 and 3. The
 centre pin is the data line '1-wire'.
+
+In case of temperature conversion problems (result is `-85`), strong pull-up setup may be necessary. See section 
+_Powering the DS18B20_ in 
+[DS18B20 datasheet](https://datasheets.maximintegrated.com/en/ds/DS18B20.pdf) (page 7)
+and use `DallasTemperature(OneWire*, uint8_t)` constructor.
 
 We have included a "REQUIRESNEW" and "REQUIRESALARMS" definition. If you 
 want to slim down the code feel free to use either of these by including
@@ -29,6 +35,7 @@ or
 
 at the top of DallasTemperature.h
 
+Finally, please include OneWire from Paul Stoffregen in the library manager before you begin.
 
 ## Credits
 
@@ -38,6 +45,7 @@ Miles Burton <miles@mnetcs.com> originally developed this library.
 Tim Newsome <nuisance@casualhacker.net> added support for multiple sensors on
 the same bus.
 Guil Barros [gfbarros@bappos.com] added getTempByAddress (v3.5)
+   Note: these are implemented as getTempC(address) and getTempF(address)
 Rob Tillaart [rob.tillaart@gmail.com] added async modus (v3.7.0)
 
 
@@ -45,7 +53,7 @@ Rob Tillaart [rob.tillaart@gmail.com] added async modus (v3.7.0)
 
 
 You can find the latest version of the library at
-http://milesburton.com/index.php?title=Dallas_Temperature_Control_Library
+https://www.milesburton.com/Dallas_Temperature_Control_Library
 
 # License
 
