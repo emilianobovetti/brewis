@@ -41,19 +41,57 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1021"
+     inkscape:window-width="958"
+     inkscape:window-height="1016"
      id="namedview11227"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:zoom="2"
-     inkscape:cx="827.92796"
-     inkscape:cy="415.35499"
-     inkscape:window-x="0"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="635.85952"
+     inkscape:cy="386.12581"
+     inkscape:window-x="960"
      inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      inkscape:current-layer="svg11225" />
+  <g
+     transform="matrix(-0.11397897,0,0,-1.0407063,545.7313,339.89773)"
+     partID="854253620"
+     id="g10819-3-3-6-1-6">
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10815-6-6-2-2-0"
+       style="stroke:#8c0000;stroke-width:3.20000005;stroke-linecap:round" />
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10817-7-7-9-7-6"
+       style="stroke:#cc1414;stroke-width:1.60000002;stroke-linecap:round" />
+  </g>
+  <g
+     transform="matrix(-0.11397897,0,0,-1.0407063,515.48431,346.50016)"
+     partID="854253620"
+     id="g10819-3-3-6-1">
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10815-6-6-2-2"
+       style="stroke:#8c0000;stroke-width:3.20000005;stroke-linecap:round" />
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10817-7-7-9-7"
+       style="stroke:#cc1414;stroke-width:1.60000002;stroke-linecap:round" />
+  </g>
   <g
      transform="matrix(0.13669656,0,0,-1,635.36413,351.34282)"
      partID="854253620"
@@ -98,44 +136,6 @@
        id="path16607-9"
        d="m 8091,2769 c -102,-19 -185,-110 -198,-218 -18,-156 117,-294 272,-278 70,7 120,34 177,96 l 47,51 h 2141 2140 v 105 105 h -2142 c -1179,0 -2148,4 -2153,8 -6,4 -22,24 -37,44 -30,40 -111,83 -168,90 -19,3 -55,1 -79,-3 z"
        inkscape:connector-curvature="0" />
-  </g>
-  <g
-     partID="854287950"
-     id="g11047-0-2"
-     transform="matrix(0.0670618,0,0,0.99999998,511.17894,61.497406)">
-    <line
-       x1="514.31097"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="3.2044699"
-       id="line11043-6-0"
-       style="stroke:#ad6a38;stroke-width:3.20000005;stroke-linecap:round" />
-    <line
-       x1="514.31097"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="3.2044699"
-       id="line11045-3-6"
-       style="stroke:#ef6100;stroke-width:1.60000002;stroke-linecap:round" />
-  </g>
-  <g
-     partID="854287950"
-     id="g11047-0"
-     transform="matrix(0.0670618,0,0,0.99999998,479.06544,68.811365)">
-    <line
-       x1="514.31097"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="3.2044699"
-       id="line11043-6"
-       style="stroke:#ad6a38;stroke-width:3.20000005;stroke-linecap:round" />
-    <line
-       x1="514.31097"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="3.2044699"
-       id="line11045-3"
-       style="stroke:#ef6100;stroke-width:1.60000002;stroke-linecap:round" />
   </g>
   <g
      partID="854268950"
@@ -29909,43 +29909,6 @@
        style="stroke:#418dd9;stroke-width:1.60000002;stroke-linecap:round" />
   </g>
   <g
-     partID="854287950"
-     id="g11047"
-     transform="matrix(0.9957989,0,0,1,0.10607102,0)">
-    <line
-       x1="514.31097"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="3.2044699"
-       id="line11043"
-       style="stroke:#ad6a38;stroke-width:3.20000005;stroke-linecap:round" />
-    <line
-       x1="514.31097"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="3.2044699"
-       id="line11045"
-       style="stroke:#ef6100;stroke-width:1.60000002;stroke-linecap:round" />
-  </g>
-  <g
-     partID="854287800"
-     id="g11053">
-    <line
-       x1="25.2484"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="132.79201"
-       id="line11049"
-       style="stroke:#ad6a38;stroke-width:3.20000005;stroke-linecap:round" />
-    <line
-       x1="25.2484"
-       y1="3.2044699"
-       x2="25.2484"
-       y2="132.79201"
-       id="line11051"
-       style="stroke:#ef6100;stroke-width:1.60000002;stroke-linecap:round" />
-  </g>
-  <g
      partID="854287650"
      id="g11059">
     <line
@@ -29961,25 +29924,6 @@
        x2="53.779598"
        y2="129.651"
        id="line11057"
-       style="stroke:#ef6100;stroke-width:1.60000002;stroke-linecap:round" />
-  </g>
-  <g
-     partID="854287220"
-     id="g11065"
-     transform="matrix(0.9957989,0,0,1,0.10607102,0)">
-    <line
-       x1="514.58398"
-       y1="110.931"
-       x2="514.31097"
-       y2="3.2044699"
-       id="line11061"
-       style="stroke:#ad6a38;stroke-width:3.20000005;stroke-linecap:round" />
-    <line
-       x1="514.58398"
-       y1="110.931"
-       x2="514.31097"
-       y2="3.2044699"
-       id="line11063"
        style="stroke:#ef6100;stroke-width:1.60000002;stroke-linecap:round" />
   </g>
   <g
@@ -30886,4 +30830,61 @@
        x="674.90808"
        y="146.56689"
        style="stroke-width:0.75000203">gnd</tspan></text>
+  <g
+     transform="matrix(0,-0.50050738,1.1170787,0,-289.86045,141.63424)"
+     partID="854253620"
+     id="g10819-3-3">
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10815-6-6"
+       style="stroke:#8c0000;stroke-width:3.20000005;stroke-linecap:round" />
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10817-7-7"
+       style="stroke:#cc1414;stroke-width:1.60000002;stroke-linecap:round" />
+  </g>
+  <g
+     transform="matrix(-1.8595387,0,0,-1.0584797,519.26282,280.26025)"
+     partID="854253620"
+     id="g10819-3-3-5">
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10815-6-6-3"
+       style="stroke:#8c0000;stroke-width:3.20000005;stroke-linecap:round" />
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10817-7-7-5"
+       style="stroke:#cc1414;stroke-width:1.60000002;stroke-linecap:round" />
+  </g>
+  <g
+     transform="matrix(0,-0.40165511,1.2292961,0,192.66886,112.75594)"
+     partID="854253620"
+     id="g10819-3-3-6">
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10815-6-6-2"
+       style="stroke:#8c0000;stroke-width:3.20000005;stroke-linecap:round" />
+    <line
+       x1="276.99399"
+       y1="262.12799"
+       x2="3.2844"
+       y2="262.379"
+       id="line10817-7-7-9"
+       style="stroke:#cc1414;stroke-width:1.60000002;stroke-linecap:round" />
+  </g>
 </svg>
