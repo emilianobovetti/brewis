@@ -10,6 +10,9 @@ void initializeTemperatureReader(void)
     temp0.begin();
     temp1.begin();
 
+    temp0.setResolution(12);
+    temp1.setResolution(12);
+
     enableTemperatureReader();
 }
 
