@@ -1,4 +1,4 @@
-FROM alpine:latest AS build
+FROM alpine:3.18.3 AS build
 
 ENV HOME=/home/build
 
@@ -44,7 +44,7 @@ COPY --chown=builder:nogroup dune-project brewisd.opam ./
 COPY --chown=builder:nogroup src ./src
 RUN dune build
 
-FROM alpine:latest AS deploy
+FROM alpine:3.18.3 AS deploy
 
 RUN apk add --no-cache \
     libffi\
