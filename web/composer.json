@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.1.3",
         "laravel/lumen-framework": "5.8.*",
-        "phpseclib/phpseclib": "~2.0",
+        "phpseclib/phpseclib": "~3.0",
         "tymon/jwt-auth": "~1.0"
     },
     "require-dev": {
